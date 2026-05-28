@@ -290,6 +290,73 @@
     },
   });
 
+  /* ──────────────────────────────────────────
+     8.5. Glow Ribbon - Scroll Position Shift
+     リボンマスクがスクロールに合わせて横移動
+     → 動きのある演出になる
+     ────────────────────────────────────────── */
+  const ribbonMask = document.querySelector('.ribbon-mask-layer');
+
+  if (ribbonMask) {
+    // リボンの mask-position をスクロールに連動して左右に動かす
+    // → 「穴」の位置がゆっくり移動し、見える動画の領域が変化する
+    ScrollTrigger.create({
+      trigger: '.content-layer',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 3, // 重めのscrubでゆったり追従
+      onUpdate: (self) => {
+        // スクロール進行 0→1 に対して、mask-positionを -10% → 10% に移動
+        const xPos = -10 + self.progress * 20; // -10% ~ +10%
+        const yPos = self.progress * 5;        // 0% ~ 5% (微かに上下も)
+
+        ribbonMask.style.webkitMaskPosition =
+          `${xPos}% ${50 + yPos}%, center center`;
+        ribbonMask.style.maskPosition =
+          `${xPos}% ${50 + yPos}%, center center`;
+      },
+    });
+
+
+    // リボンのスケールもスクロールで微変化
+    // → 下に行くほどリボンが少し大きくなる
+    ScrollTrigger.create({
+      trigger: '.content-layer',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 2,
+      onUpdate: (self) => {
+        const scale = 120 + self.progress * 15; // 120% → 135%
+
+        ribbonMask.style.webkitMaskSize =
+          `${scale}% 100%, 100% 100%`;
+        ribbonMask.style.maskSize =
+          `${scale}% 100%, 100% 100%`;
+      },
+    });
+  }
+
+
+  /* ──────────────────────────────────────────
+     8.6. Glow Video - Scroll Color Shift
+     動画レイヤーのhue-rotateをスクロールに合わせて変化
+     → スクロール位置によって発光色が微妙に変わる
+     ────────────────────────────────────────── */
+  const glowVideoEl = document.querySelector('.glow-video-layer video');
+
+  if (glowVideoEl) {
+    ScrollTrigger.create({
+      trigger: '.content-layer',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 2,
+      onUpdate: (self) => {
+        const hue = self.progress * 40; // 0deg → 40deg
+        glowVideoEl.style.filter =
+          `saturate(1.4) brightness(1.1) hue-rotate(${hue}deg)`;
+      },
+    });
+  }
 
   /* ──────────────────────────────────────────
      9. Section Number Animation
