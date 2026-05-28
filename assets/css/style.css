@@ -1211,3 +1211,153 @@ body.is-loaded .content-layer {
   75%  { background-position: 50% 100%; }
   100% { background-position: 0% 50%; }
 }
+
+/* ============================================
+   SVG Filters Container (hidden)
+   ============================================ */
+.svg-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+
+/* ============================================
+   Floating Parts - Halftone Effect (Phase 4)
+   ============================================ */
+
+/* 全パーツ共通: ハーフトーン+白フチフィルター適用 */
+.floating-part {
+  /* Phase 1のfilterを上書き */
+  filter: url(#halftone-outlined);
+  opacity: 0.5;
+  will-change: transform, opacity;
+  transition: opacity 0.6s ease;
+}
+
+/* ホバー時にパーツが少し明るくなる（セクション全体hover） */
+section:hover .floating-part {
+  opacity: 0.65;
+}
+
+
+/* ============================================
+   Floating Parts - Position Fine-Tuning (Phase 4)
+   各パーツの位置・サイズをセクションレイアウトに
+   合わせて微調整
+   ============================================ */
+
+/* --- 02. Concept --- */
+.parts-pen-hand {
+  width: clamp(120px, 20vw, 260px);
+  top: 8%;
+  left: -5%;
+  transform: rotate(-8deg);
+}
+
+.parts-notebook {
+  width: clamp(90px, 15vw, 200px);
+  bottom: 12%;
+  right: -2%;
+  transform: rotate(5deg);
+}
+
+/* --- 03. Service --- */
+.parts-pc-arm {
+  width: clamp(140px, 22vw, 300px);
+  bottom: 3%;
+  left: -8%;
+  transform: rotate(-5deg);
+}
+
+.parts-design-tool {
+  width: clamp(90px, 14vw, 180px);
+  top: 5%;
+  right: -3%;
+  transform: rotate(12deg);
+}
+
+/* --- 05. Voice --- */
+.parts-smartphone {
+  width: clamp(100px, 16vw, 200px);
+  top: 3%;
+  right: 3%;
+  transform: rotate(8deg);
+}
+
+.parts-chat-bubble {
+  width: clamp(70px, 12vw, 150px);
+  bottom: 10%;
+  left: 2%;
+  transform: rotate(-6deg);
+}
+
+/* --- 06. Flow --- */
+.parts-handshake {
+  width: clamp(120px, 18vw, 240px);
+  top: 35%;
+  right: -5%;
+  transform: rotate(3deg);
+}
+
+/* --- 08. Contact --- */
+.parts-keyboard {
+  width: clamp(120px, 18vw, 220px);
+  bottom: 15%;
+  left: 3%;
+  transform: rotate(-3deg);
+}
+
+
+/* ============================================
+   Floating Parts - Scroll Reveal
+   スクロールでセクションに入ると
+   パーツがフェードイン
+   ============================================ */
+.floating-part {
+  opacity: 0;
+}
+
+.floating-part.is-visible {
+  opacity: 0.5;
+}
+
+section:hover .floating-part.is-visible {
+  opacity: 0.65;
+}
+
+
+/* ============================================
+   Responsive - Floating Parts (Phase 4)
+   ============================================ */
+@media (max-width: 767px) {
+  .floating-part {
+    /* モバイルではSVGフィルターが重い場合があるため
+       シンプルフィルターに切替 */
+    filter: url(#halftone-simple);
+  }
+
+  /* モバイルでは全パーツを一回り小さく */
+  .parts-pen-hand   { width: clamp(80px, 18vw, 140px); }
+  .parts-pc-arm     { width: clamp(90px, 20vw, 160px); }
+  .parts-smartphone { width: clamp(70px, 15vw, 120px); }
+  .parts-keyboard   { width: clamp(80px, 16vw, 140px); }
+
+  /* モバイル非表示パーツ（Phase 1で定義済み、ここで再確認） */
+  .parts-notebook,
+  .parts-design-tool,
+  .parts-chat-bubble,
+  .parts-handshake {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  /* 極小画面ではさらにパーツ数を減らす */
+  .parts-keyboard {
+    display: none;
+  }
+}
+
