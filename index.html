@@ -29,6 +29,88 @@
 </head>
 
 <body>
+  <!-- ============================================
+       SVG Filters (Hidden / Referenced by CSS)
+       ============================================ -->
+  <svg class="svg-filters" aria-hidden="true">
+    <defs>
+      <!-- ハーフトーン（ドット）フィルター -->
+      <filter id="halftone" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <!-- Step 1: グレースケール化 -->
+        <feColorMatrix type="saturate" values="0" result="gray" />
+
+        <!-- Step 2: コントラスト強調（明暗をはっきりさせる） -->
+        <feComponentTransfer in="gray" result="contrast">
+          <feFuncR type="linear" slope="1.5" intercept="-0.15" />
+          <feFuncG type="linear" slope="1.5" intercept="-0.15" />
+          <feFuncB type="linear" slope="1.5" intercept="-0.15" />
+        </feComponentTransfer>
+
+        <!-- Step 3: ドットパターン生成 -->
+        <feImage href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Ccircle cx='3' cy='3' r='2.2' fill='%23888'/%3E%3Crect width='6' height='6' fill='white'/%3E%3Ccircle cx='3' cy='3' r='2.2' fill='%23777'/%3E%3C/svg%3E"
+          x="0" y="0" width="6" height="6" result="dots" />
+        <feTile in="dots" result="pattern" />
+
+        <!-- Step 4: パターンとグレースケール画像をブレンド -->
+        <feBlend in="contrast" in2="pattern" mode="multiply" result="blended" />
+
+        <!-- Step 5: 高コントラストで白黒に二値化 -->
+        <feComponentTransfer in="blended" result="halftoned">
+          <feFuncR type="discrete" tableValues="0 0 0 0 0 0 0 0.1 0.3 1 1 1 1 1" />
+          <feFuncG type="discrete" tableValues="0 0 0 0 0 0 0 0.1 0.3 1 1 1 1 1" />
+          <feFuncB type="discrete" tableValues="0 0 0 0 0 0 0 0.1 0.3 1 1 1 1 1" />
+        </feComponentTransfer>
+
+        <!-- Step 6: 元のアルファチャンネルを保持 -->
+        <feComposite in="halftoned" in2="SourceGraphic" operator="in" />
+      </filter>
+
+      <!-- シンプル版：グレースケール + ハイコントラスト（軽量フォールバック） -->
+      <filter id="halftone-simple" color-interpolation-filters="sRGB">
+        <feColorMatrix type="saturate" values="0" />
+        <feComponentTransfer>
+          <feFuncR type="linear" slope="2.0" intercept="-0.3" />
+          <feFuncG type="linear" slope="2.0" intercept="-0.3" />
+          <feFuncB type="linear" slope="2.0" intercept="-0.3" />
+        </feComponentTransfer>
+        <feComposite in2="SourceGraphic" operator="in" />
+      </filter>
+
+      <!-- 白フチ用ドロップシャドウ -->
+      <filter id="white-outline" x="-5%" y="-5%" width="110%" height="110%">
+        <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="expanded" />
+        <feFlood flood-color="#ffffff" flood-opacity="0.9" result="white" />
+        <feComposite in="white" in2="expanded" operator="in" result="outline" />
+        <feMerge>
+          <feMergeNode in="outline" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+
+      <!-- ハーフトーン + 白フチ 合体版 -->
+      <filter id="halftone-outlined" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <!-- ハーフトーン処理 -->
+        <feColorMatrix type="saturate" values="0" result="gray" />
+        <feComponentTransfer in="gray" result="contrast">
+          <feFuncR type="linear" slope="1.8" intercept="-0.2" />
+          <feFuncG type="linear" slope="1.8" intercept="-0.2" />
+          <feFuncB type="linear" slope="1.8" intercept="-0.2" />
+        </feComponentTransfer>
+
+        <!-- 白フチ -->
+        <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="expanded" />
+        <feFlood flood-color="#ffffff" flood-opacity="0.85" result="white" />
+        <feComposite in="white" in2="expanded" operator="in" result="outline" />
+
+        <!-- 合成: 白フチの上にハーフトーン画像 -->
+        <feComposite in="contrast" in2="SourceGraphic" operator="in" result="halftoned" />
+        <feMerge>
+          <feMergeNode in="outline" />
+          <feMergeNode in="halftoned" />
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
 
   <!-- ============================================
        z-1: FV Background Layer (fixed)
