@@ -751,6 +751,22 @@
     }
   }
 
+  /* ──────────────────────────────────────────
+     19.5. Mobile - Ribbon Mask Fallback
+     モバイルではmask-compositeのサポートが不安定な場合があるため
+     シンプルなグラデーションマスクに切り替え
+     ────────────────────────────────────────── */
+  if (isMobile) {
+    if (ribbonMask) {
+      // SVGマスクの代わりにグラデーションで簡略化
+      ribbonMask.style.webkitMaskImage =
+        'linear-gradient(135deg, transparent 30%, black 30%, black 60%, transparent 60%)';
+      ribbonMask.style.maskImage =
+        'linear-gradient(135deg, transparent 30%, black 30%, black 60%, transparent 60%)';
+      ribbonMask.style.webkitMaskComposite = 'initial';
+      ribbonMask.style.maskComposite = 'initial';
+    }
+  }
 
   /* ──────────────────────────────────────────
      20. Mobile Nav Toggle
