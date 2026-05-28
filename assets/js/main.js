@@ -651,6 +651,66 @@
     },
   });
 
+     /* ──────────────────────────────────────────
+     16.5. Floating Parts - Scroll Reveal
+     各パーツがセクションに入った時にフェードイン
+     ────────────────────────────────────────── */
+  gsap.utils.toArray('.floating-part').forEach((part) => {
+    const parentSection = part.closest('section');
+    if (!parentSection) return;
+
+    // 初期状態: 透明
+    gsap.set(part, { opacity: 0, scale: 0.85 });
+
+    // セクションに入ったらフェードイン
+    gsap.to(part, {
+      opacity: 0.5,
+      scale: 1,
+      duration: 1.0,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: parentSection,
+        start: 'top 70%',
+        toggleActions: 'play none none reverse',
+      },
+      onComplete: () => {
+        part.classList.add('is-visible');
+      },
+      onReverseComplete: () => {
+        part.classList.remove('is-visible');
+      },
+    });
+  });
+
+
+  /* ──────────────────────────────────────────
+     16.6. Floating Parts - Mouse Parallax
+     マウスに追従して微かに動く視差効果
+     ────────────────────────────────────────── */
+  if (!isMobile) {
+    const parts = document.querySelectorAll('.floating-part');
+
+    document.addEventListener('mousemove', (e) => {
+      const xRatio = (e.clientX / window.innerWidth - 0.5) * 2;  // -1 ~ 1
+      const yRatio = (e.clientY / window.innerHeight - 0.5) * 2; // -1 ~ 1
+
+      parts.forEach((part, index) => {
+        // パーツごとに動きの強度を変える（偶数/奇数で逆方向）
+        const intensity = (index % 2 === 0) ? 15 : -10;
+        const xMove = xRatio * intensity;
+        const yMove = yRatio * intensity * 0.6;
+
+        gsap.to(part, {
+          x: xMove,
+          y: yMove,
+          duration: 1.2,
+          ease: 'power2.out',
+          overwrite: 'auto',
+        });
+      });
+    });
+  }
+
 
   /* ──────────────────────────────────────────
      17. Floating Parts - Float + Parallax
