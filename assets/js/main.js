@@ -220,6 +220,29 @@
       },
     });
   }
+  /* ──────────────────────────────────────────
+     7.5. Glow Video - Fallback Detection
+     動画の読み込みに失敗した場合、自動でCSS
+     グラデーションにフォールバック
+     ────────────────────────────────────────── */
+  if (glowVideo) {
+    glowVideo.addEventListener('error', () => {
+      console.warn('Glow video failed to load. Using CSS gradient fallback.');
+      const layer = document.querySelector('.glow-video-layer');
+      if (layer) {
+        layer.classList.add('glow-video-layer--fallback');
+      }
+    });
+
+    // 動画ソースが空の場合もフォールバック
+    const videoSource = glowVideo.querySelector('source');
+    if (videoSource && !videoSource.getAttribute('src')) {
+      const layer = document.querySelector('.glow-video-layer');
+      if (layer) {
+        layer.classList.add('glow-video-layer--fallback');
+      }
+    }
+  }
 
 
   /* ──────────────────────────────────────────
