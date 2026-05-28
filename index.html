@@ -1,17 +1,604 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>私のホームページ</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PORTFOLIO | SNS DESIGN & DIRECTION</title>
+
+  <!-- OGP -->
+  <meta property="og:title" content="PORTFOLIO | SNS DESIGN & DIRECTION" />
+  <meta property="og:description" content="SNSやWebのデザインを通じて、誰かの人生をそっと動かしたい。" />
+  <meta property="og:image" content="assets/images/common/ogp.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/images/common/favicon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="assets/images/common/favicon.png" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
+
 <body>
 
-    <div class="container">
-        <h1>Hello, World!</h1>
-        <p>GitHub上でCSSファイルを作成し、ホームページのデザインをリニューアルしました！</p>
-    </div>
+  <!-- ============================================
+       z-1: FV Background Layer (fixed)
+       ============================================ -->
+  <div class="fv-bg-layer" aria-hidden="true">
+    <img
+      class="fv-bg-blur"
+      src="assets/images/fv/fv_bg_main.webp"
+      alt=""
+      loading="eager"
+    />
+    <div class="fv-bg-overlay"></div>
+  </div>
 
+  <!-- ============================================
+       z-2: Glow Video Layer (fixed)
+       ============================================ -->
+  <div class="glow-video-layer" aria-hidden="true">
+    <video autoplay muted loop playsinline preload="none">
+      <source src="assets/video/glow_gradient_loop.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- ============================================
+       z-3: Ribbon Mask Layer (fixed)
+       ============================================ -->
+  <div class="ribbon-mask-layer" aria-hidden="true"></div>
+
+  <!-- ============================================
+       z-4: Content Layer (scrollable)
+       ============================================ -->
+  <main class="content-layer">
+
+    <!-- ========== HEADER / NAV ========== -->
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="/" class="header-logo">
+          <!-- 暫定テキストロゴ -->
+          <span class="logo-text">PORTFOLIO</span>
+        </a>
+        <nav class="header-nav">
+          <ul class="nav-list">
+            <li><a href="#works" class="nav-link">Works</a></li>
+            <li><a href="#service" class="nav-link">Service</a></li>
+            <li><a href="#voice" class="nav-link">Voice</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+          </ul>
+        </nav>
+        <button class="nav-toggle" aria-label="メニュー">
+          <span class="nav-toggle-dot"></span>
+          <span class="nav-toggle-text">Menu</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========== 01. FV ========== -->
+    <section id="fv" class="section-fv">
+      <div class="fv-content">
+        <div class="fv-slides-wrapper">
+          <div class="swiper fv-slides">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_01.webp" alt="作品1" />
+              </div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_02.webp" alt="作品2" />
+              </div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_03.webp" alt="作品3" />
+              </div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_04.webp" alt="作品4" />
+              </div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_05.webp" alt="作品5" />
+              </div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_06.webp" alt="作品6" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fv-text">
+          <h1 class="fv-title">
+            <span class="fv-title-main">PORTFOLIO</span>
+          </h1>
+          <p class="fv-subtitle">SNS DESIGN & DIRECTION</p>
+        </div>
+
+        <div class="fv-scroll-indicator">
+          <span class="scroll-line"></span>
+          <span class="scroll-label">SCROLL</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 02. CONCEPT ========== -->
+    <section id="concept" class="section-concept parallax-section" data-depth="0.1">
+      <div class="section-inner">
+        <div class="section-label">
+          <span class="section-number">[02]</span>
+          <span class="section-name">Concept</span>
+        </div>
+
+        <!-- 浮遊パーツ -->
+        <div class="floating-parts">
+          <img
+            class="floating-part parts-pen-hand"
+            src="assets/images/parts/parts_pen_hand.png"
+            alt=""
+            loading="lazy"
+          />
+          <img
+            class="floating-part parts-notebook"
+            src="assets/images/parts/parts_notebook.png"
+            alt=""
+            loading="lazy"
+          />
+        </div>
+
+        <div class="concept-text-wrapper">
+          <p class="concept-text concept-text--lead">
+            SNSやWebのデザインを通じて、<br />
+            誰かの人生をそっと動かしたい。
+          </p>
+          <div class="concept-text concept-text--body">
+            <p>
+              「蝶」。<br />
+              変化や美しさの象徴であると同時に、<br />
+              一羽の蝶のささやかな羽ばたきが、<br />
+              巡り巡って地球の反対側で大きな変化を起こす──。
+            </p>
+            <p>
+              デザインも同じだと思っています。<br />
+              画面の中の小さな一枚が、<br />
+              誰かの心を動かし、行動を生み、<br />
+              やがてその人の人生を変えていく。
+            </p>
+            <p>
+              ただ「綺麗なもの」ではなく、<br />
+              「人の背中をそっと押せるもの」。
+            </p>
+            <p>
+              あなたのブランドの、その羽ばたきの一翼を、<br />
+              私に担わせてください。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 03. SERVICE ========== -->
+    <section id="service" class="section-service parallax-section" data-depth="0.15">
+      <div class="section-inner">
+        <div class="section-label">
+          <span class="section-number">[03]</span>
+          <span class="section-name">Service</span>
+        </div>
+
+        <!-- 浮遊パーツ -->
+        <div class="floating-parts">
+          <img
+            class="floating-part parts-pc-arm"
+            src="assets/images/parts/parts_pc_arm.png"
+            alt=""
+            loading="lazy"
+          />
+          <img
+            class="floating-part parts-design-tool"
+            src="assets/images/parts/parts_design_tool.png"
+            alt=""
+            loading="lazy"
+          />
+        </div>
+
+        <div class="service-grid">
+          <div class="service-card">
+            <span class="service-card-number">01</span>
+            <h3 class="service-card-title">SNSデザイン</h3>
+            <p class="service-card-text">
+              Instagramを中心とした投稿デザイン、ストーリーズ、リールカバーなど。ブランドの世界観をひと目で伝えるビジュアルを設計します。
+            </p>
+          </div>
+          <div class="service-card">
+            <span class="service-card-number">02</span>
+            <h3 class="service-card-title">SNS運用代行 / コンサルティング</h3>
+            <p class="service-card-text">
+              主戦場はInstagram。デザイン制作だけでなく、戦略設計・投稿企画・分析改善まで一貫してサポートします。「作って終わり」ではなく、数字と向き合いながら成果に伴走します。
+            </p>
+          </div>
+          <div class="service-card">
+            <span class="service-card-number">03</span>
+            <h3 class="service-card-title">動画編集 / ショート動画制作</h3>
+            <p class="service-card-text">
+              リール、TikTokなどのショート動画編集を得意としています。テンポ・色味・テロップで"見られる"動画に仕上げます。
+            </p>
+          </div>
+          <div class="service-card">
+            <span class="service-card-number">04</span>
+            <h3 class="service-card-title">ファッション関連デザイン</h3>
+            <p class="service-card-text">
+              ファッション分野でのビジュアル制作にも強みがあります。ブランドのトーンに寄り添った、空気感のあるデザインをお届けします。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 04. WORKS ========== -->
+    <section id="works" class="section-works">
+      <div class="section-inner section-inner--wide">
+        <div class="section-label">
+          <span class="section-number">[04]</span>
+          <span class="section-name">Works</span>
+        </div>
+
+        <div class="works-horizontal-scroll">
+          <div class="works-track">
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_01.webp" alt="Work 01" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 01</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_02.webp" alt="Work 02" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 02</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_03.webp" alt="Work 03" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 03</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_04.webp" alt="Work 04" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 04</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_05.webp" alt="Work 05" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 05</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_06.webp" alt="Work 06" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 06</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 05. VOICE ========== -->
+    <section id="voice" class="section-voice parallax-section" data-depth="0.1">
+      <div class="section-inner">
+        <div class="section-label">
+          <span class="section-number">[05]</span>
+          <span class="section-name">Voice</span>
+        </div>
+
+        <!-- 浮遊パーツ -->
+        <div class="floating-parts">
+          <img
+            class="floating-part parts-smartphone"
+            src="assets/images/parts/parts_smartphone.png"
+            alt=""
+            loading="lazy"
+          />
+          <img
+            class="floating-part parts-chat-bubble"
+            src="assets/images/parts/parts_chat_bubble.png"
+            alt=""
+            loading="lazy"
+          />
+        </div>
+
+        <div class="swiper voice-slider">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <blockquote class="voice-item">
+                <span class="voice-number">01</span>
+                <p class="voice-text">
+                  投稿デザインを一新してもらってから、明らかにアカウントの空気感が変わりました。「世界観が好き」と言ってフォローしてくれる方が増えて、売上にも繋がっています。お願いして本当によかったです。
+                </p>
+                <footer class="voice-author">
+                  <span>— アパレルブランド運営 / 30代女性</span>
+                </footer>
+              </blockquote>
+            </div>
+            <div class="swiper-slide">
+              <blockquote class="voice-item">
+                <span class="voice-number">02</span>
+                <p class="voice-text">
+                  ただ綺麗なだけじゃなくて、「なぜこのデザインなのか」をきちんと説明してくれるのが信頼できました。リールの再生数が10倍以上になり、新規のお客様が目に見えて増えています。
+                </p>
+                <footer class="voice-author">
+                  <span>— 飲食店オーナー / 40代男性</span>
+                </footer>
+              </blockquote>
+            </div>
+            <div class="swiper-slide">
+              <blockquote class="voice-item">
+                <span class="voice-number">03</span>
+                <p class="voice-text">
+                  運用代行をお願いしてから、投稿のことで悩む時間がゼロになりました。毎月の改善提案も的確で、本業に集中できる環境を作ってもらえたのが何より嬉しいです。
+                </p>
+                <footer class="voice-author">
+                  <span>— パーソナルジム経営 / 30代男性</span>
+                </footer>
+              </blockquote>
+            </div>
+            <div class="swiper-slide">
+              <blockquote class="voice-item">
+                <span class="voice-number">04</span>
+                <p class="voice-text">
+                  自分の作品の魅力を、自分以上に言葉と画で表現してくれる方です。「私のブランドって、こんなに素敵だったんだ」と思わせてくれました。ファンが増えたのはもちろん、自信もくれた存在です。
+                </p>
+                <footer class="voice-author">
+                  <span>— ハンドメイド作家 / 20代女性</span>
+                </footer>
+              </blockquote>
+            </div>
+            <div class="swiper-slide">
+              <blockquote class="voice-item">
+                <span class="voice-number">05</span>
+                <p class="voice-text">
+                  ショート動画の編集をお願いしていますが、テンポも色味も完璧で、毎回仕上がりが楽しみです。お客様からも「動画見て予約しました」という声が増えました。プロにお願いして正解でした。
+                </p>
+                <footer class="voice-author">
+                  <span>— 美容サロン経営 / 30代女性</span>
+                </footer>
+              </blockquote>
+            </div>
+          </div>
+          <div class="voice-pagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 06. FLOW ========== -->
+    <section id="flow" class="section-flow parallax-section" data-depth="0.08">
+      <div class="section-inner">
+        <div class="section-label">
+          <span class="section-number">[06]</span>
+          <span class="section-name">Flow</span>
+        </div>
+
+        <!-- 浮遊パーツ -->
+        <div class="floating-parts">
+          <img
+            class="floating-part parts-handshake"
+            src="assets/images/parts/parts_handshake.png"
+            alt=""
+            loading="lazy"
+          />
+        </div>
+
+        <div class="flow-timeline">
+          <svg class="flow-line" viewBox="0 0 2 600" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gradient-glow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#6366F1" />
+                <stop offset="50%" stop-color="#A855F7" />
+                <stop offset="100%" stop-color="#EC4899" />
+              </linearGradient>
+            </defs>
+            <path d="M1,0 L1,600" stroke="url(#gradient-glow)" stroke-width="2" fill="none" />
+          </svg>
+
+          <div class="flow-step">
+            <span class="flow-step-number">01</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">お問い合わせ</h3>
+              <p class="flow-step-text">フォームよりお気軽にご連絡ください。ご相談・お見積もりは無料です。</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-number">02</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">ヒアリング</h3>
+              <p class="flow-step-text">オンラインにて、目的・ターゲット・ブランドイメージを丁寧にお伺いします。全国どこからでもご依頼いただけます。</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-number">03</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">ご提案・お見積もり</h3>
+              <p class="flow-step-text">ヒアリング内容をもとに、最適なプランとお見積もりをご提示します。</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-number">04</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">ご契約・制作開始</h3>
+              <p class="flow-step-text">内容にご納得いただけましたら契約。デザイン・運用に着手します。進捗は随時共有します。</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-number">05</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">納品・公開</h3>
+              <p class="flow-step-text">ご確認・修正対応を経て、納品または投稿開始。</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-number">06</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">継続サポート</h3>
+              <p class="flow-step-text">SNS運用の場合は、毎月の分析と改善提案を継続的に行います。一羽の蝶を、長く美しく舞わせるために。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 07. FAQ ========== -->
+    <section id="faq" class="section-faq">
+      <div class="section-inner">
+        <div class="section-label">
+          <span class="section-number">[07]</span>
+          <span class="section-name">FAQ</span>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>契約期間はどのくらいですか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>SNS運用代行は最低3ヶ月〜、デザイン単発のご依頼は1案件〜お受けしています。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>料金はどのくらいですか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>プロジェクトの規模や内容により異なります。ヒアリング後に個別にお見積もりをお出しします。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>遠方でも依頼できますか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>はい、オンラインでの打ち合わせを基本としていますので、全国どこからでもご依頼いただけます。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>デザインだけ、運用だけのご依頼も可能ですか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>もちろん可能です。SNSデザインのみ、運用代行のみ、動画編集のみなど、ご希望に合わせて柔軟にお受けします。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>途中でプラン変更はできますか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>はい、アカウントの状況やご要望に応じて、柔軟にプラン内容を見直すことができます。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>ファッション以外の業種でも依頼できますか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>はい、業種は問わずお受けしています。ヒアリングを通じてブランドの世界観を理解し、最適なデザインをご提案します。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 08. CONTACT ========== -->
+    <section id="contact" class="section-contact parallax-section" data-depth="0.05">
+      <div class="section-inner">
+        <div class="section-label">
+          <span class="section-number">[08]</span>
+          <span class="section-name">Contact</span>
+        </div>
+
+        <!-- 浮遊パーツ -->
+        <div class="floating-parts">
+          <img
+            class="floating-part parts-keyboard"
+            src="assets/images/parts/parts_keyboard.png"
+            alt=""
+            loading="lazy"
+          />
+        </div>
+
+        <div class="contact-content">
+          <p class="contact-text">
+            ご相談・お見積もり・ちょっとした質問でも、お気軽にどうぞ。<br />
+            あなたの「伝えたい」を、一緒に形にしていきましょう。
+          </p>
+          <a href="#" class="contact-btn">
+            <span class="contact-btn-text">CONTACT</span>
+            <span class="contact-btn-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <span class="logo-text">PORTFOLIO</span>
+        </div>
+        <div class="footer-sns">
+          <a href="#" class="footer-sns-link" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="#" class="footer-sns-link" target="_blank" rel="noopener noreferrer">X</a>
+          <a href="#" class="footer-sns-link" target="_blank" rel="noopener noreferrer">LINE</a>
+        </div>
+        <p class="footer-copyright">&copy; 2026 PORTFOLIO. All Rights Reserved.</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ============================================
+       Scripts
+       ============================================ -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/split-type"></script>
+  <script src="https://unpkg.com/lenis@1/dist/lenis.min.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
