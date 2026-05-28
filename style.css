@@ -1,0 +1,35 @@
+/* 画面全体の設定 */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); /* プリズム・綺麗めなグラデーション */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+}
+
+/* 中央の白いカード部分の設定 */
+.container {
+    background-color: rgba(255, 255, 255, 0.9); /* 少し透ける白 */
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #4a4a4a;
+}
+
+p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
