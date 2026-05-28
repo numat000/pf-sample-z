@@ -1181,3 +1181,33 @@ body.is-loaded .content-layer {
   transition: -webkit-mask-position 0.1s linear, mask-position 0.1s linear;
 }
 
+/* ============================================
+   Glow Video Fallback (動画未準備時)
+   動画の代わりにCSSグラデーションアニメーション
+   ============================================ */
+.glow-video-layer--fallback {
+  background: linear-gradient(
+    135deg,
+    #6366F1 0%,
+    #8B5CF6 15%,
+    #A855F7 30%,
+    #D946EF 45%,
+    #EC4899 60%,
+    #F43F5E 75%,
+    #6366F1 100%
+  );
+  background-size: 400% 400%;
+  animation: glowGradientFlow 10s ease infinite;
+}
+
+.glow-video-layer--fallback video {
+  display: none;
+}
+
+@keyframes glowGradientFlow {
+  0%   { background-position: 0% 50%; }
+  25%  { background-position: 50% 0%; }
+  50%  { background-position: 100% 50%; }
+  75%  { background-position: 50% 100%; }
+  100% { background-position: 0% 50%; }
+}
