@@ -711,6 +711,30 @@
     });
   }
 
+     /* ──────────────────────────────────────────
+     16.7. Floating Parts - SVG Filter Fallback
+     SVGフィルターが効かない場合のCSS filterフォールバック
+     ────────────────────────────────────────── */
+  (function checkSvgFilterSupport() {
+    const testEl = document.createElement('div');
+    testEl.style.filter = 'url(#halftone-outlined)';
+    document.body.appendChild(testEl);
+
+    const computed = getComputedStyle(testEl).filter;
+    document.body.removeChild(testEl);
+
+    // フィルターがnoneに解決される場合 = SVGフィルター未対応
+    if (computed === 'none' || computed === '') {
+      console.warn('SVG filters not supported. Falling back to CSS filters.');
+      document.querySelectorAll('.floating-part').forEach((part) => {
+        part.style.filter = 'grayscale(1) contrast(1.4) brightness(1.1)';
+        part.style.webkitFilter = 'grayscale(1) contrast(1.4) brightness(1.1)';
+        // 白フチはCSS drop-shadowで代替
+        part.style.filter += ' drop-shadow(0 0 3px rgba(255,255,255,0.8))';
+      });
+    }
+  })();
+
 
   /* ──────────────────────────────────────────
      17. Floating Parts - Float + Parallax
