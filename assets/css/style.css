@@ -342,6 +342,7 @@ button {
 /* ============================================
    Section Background Opacity Control
    (Controls visibility of ribbon through sections)
+   ★ margin/gap を消し、隣接セクションが重なるように
    ============================================ */
 .section-fv {
   background: transparent;
@@ -349,30 +350,78 @@ button {
 
 .section-concept {
   background: rgba(10, 10, 15, 0.6);
+  /* ★ 隙間を消す: 上にわずかにはみ出す */
+  margin-top: -1px;
+  padding-top: 1px;
 }
 
 .section-service {
   background: rgba(10, 10, 15, 0.6);
+  margin-top: -1px;
+  padding-top: 1px;
 }
 
 .section-works {
-  background: rgba(10, 10, 15, 1); /* Opaque: hides ribbon */
+  background: rgba(10, 10, 15, 1);
+  margin-top: -1px;
+  padding-top: 1px;
 }
 
 .section-voice {
   background: rgba(10, 10, 15, 0.6);
+  margin-top: -1px;
+  padding-top: 1px;
 }
 
 .section-flow {
   background: rgba(10, 10, 15, 0.7);
+  margin-top: -1px;
+  padding-top: 1px;
 }
 
 .section-faq {
-  background: rgba(10, 10, 15, 1); /* Opaque: hides ribbon */
+  background: rgba(10, 10, 15, 1);
+  margin-top: -1px;
+  padding-top: 1px;
 }
 
 .section-contact {
   background: rgba(10, 10, 15, 0.7);
+  margin-top: -1px;
+  padding-top: 1px;
+}
+
+/* ============================================
+   Section Gap Killer
+   サブピクセルレンダリングによるセクション間隙間を完全に消す
+   ============================================ */
+.section-concept,
+.section-service,
+.section-works,
+.section-voice,
+.section-flow,
+.section-faq,
+.section-contact {
+  position: relative;
+}
+
+/* 上辺に同色の影を被せて隙間を見えなくする */
+.section-concept::before,
+.section-service::before,
+.section-works::before,
+.section-voice::before,
+.section-flow::before,
+.section-faq::before,
+.section-contact::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: inherit;
+  z-index: 1;
+  pointer-events: none;
 }
 
 
@@ -531,9 +580,11 @@ button {
 /* Service parts */
 .parts-pc-arm {
   width: clamp(120px, 20vw, 260px);
-  bottom: 5%;
-  left: -5%;
+  /* ★ カードに被らないよう下・左にずらす */
+  bottom: -8%;
+  left: -12%;
 }
+
 
 .parts-design-tool {
   width: clamp(80px, 12vw, 160px);
@@ -779,16 +830,36 @@ button {
   padding-left: 40px;
 }
 
-.flow-line {
+/* ★ ドットを繋ぐ縦線（CSSで描画） */
+.flow-timeline::before {
+  content: '';
   position: absolute;
-  top: 0;
-  left: 12px;
+  /* ドットの中心 X = -34px + 5px = -29px → padding-left 40px 基準で left: 6px */
+  left: 6px;
+  top: 6px;       /* 最初のドットの中心と合わせる */
+  bottom: 60px;   /* 最後のステップのpadding-bottom分を引く */
   width: 2px;
-  height: 100%;
+  /* ★ グラデーションライン */
+  background: linear-gradient(
+    to bottom,
+    var(--color-accent-1),
+    var(--color-accent-2),
+    var(--color-accent-3)
+  );
+  border-radius: 1px;
+  /* ★ 初期状態: scaleY(0) にしてスクロールで伸ばす */
+  transform: scaleY(0);
+  transform-origin: top;
+  will-change: transform;
+  /* ★ 発光エフェクト */
+  box-shadow: 
+    0 0 6px rgba(168, 85, 247, 0.4),
+    0 0 12px rgba(168, 85, 247, 0.2);
 }
 
-.flow-line path {
-  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.4));
+/* スクロールで線が伸びた状態 */
+.flow-timeline.line-drawn::before {
+  transform: scaleY(1);
 }
 
 .flow-step {
@@ -797,6 +868,7 @@ button {
   padding-left: 20px;
 }
 
+/* ★ ドット（位置はそのまま、z-index を線の上にする） */
 .flow-step::before {
   content: '';
   position: absolute;
@@ -807,6 +879,7 @@ button {
   border-radius: 50%;
   background: var(--color-accent-2);
   box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+  z-index: 2;
 }
 
 .flow-step-number {
@@ -1302,10 +1375,12 @@ section:hover .floating-part {
 /* --- 03. Service --- */
 .parts-pc-arm {
   width: clamp(140px, 22vw, 300px);
-  bottom: 3%;
-  left: -8%;
+  /* ★ カードに被らないよう下・左にずらす */
+  bottom: -10%;
+  left: -14%;
   transform: rotate(-5deg);
 }
+
 
 .parts-design-tool {
   width: clamp(90px, 14vw, 180px);
