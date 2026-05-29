@@ -540,7 +540,7 @@ button {
 .parts-pen-hand {
   width: clamp(100px, 18vw, 220px);
   top: 10%;
-  left: -3%;
+  left: 30%;
 }
 
 .parts-notebook {
