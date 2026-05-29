@@ -714,14 +714,21 @@ button {
 }
 
 .voice-item {
-  padding: clamp(32px, 5vw, 60px) 0;
+  /* ★ カード風の背景を追加して視認性UP */
+  padding: clamp(32px, 5vw, 60px) clamp(24px, 4vw, 48px);
+  background: rgba(10, 10, 15, 0.85);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .voice-number {
   font-family: var(--font-serif);
   font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.06);
+  /* ★ 番号も少し明るく */
+  color: rgba(255, 255, 255, 0.1);
   display: block;
   margin-bottom: 16px;
   line-height: 1;
@@ -731,11 +738,13 @@ button {
   font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
   line-height: 2.2;
   margin-bottom: 24px;
+  /* ★ テキストの白さを確保 */
+  color: var(--color-text);
 }
 
 .voice-author {
   font-size: 0.8125rem;
-  color: var(--color-text-dim);
+  color: var(--color-text-muted);
 }
 
 .voice-pagination {
