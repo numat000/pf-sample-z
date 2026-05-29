@@ -320,41 +320,30 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
     },
   });
 
-   /* ──────────────────────────────────────────
+  /* ──────────────────────────────────────────
      8.5. Glow Ribbon - Scroll Position Shift
+     ★ インラインSVG方式: path要素をGSAPで直接移動
      ────────────────────────────────────────── */
   const ribbonMask = document.querySelector('.ribbon-mask-layer');
+  const ribbonPath = document.querySelector('.ribbon-mask-layer path');
 
-  if (ribbonMask) {
+  if (ribbonMask && ribbonPath) {
     ScrollTrigger.create({
       trigger: '.content-layer',
       start: 'top top',
       end: 'bottom bottom',
       scrub: 3,
       onUpdate: (self) => {
-        // ★ 移動範囲を -25% ~ -5% に制限（端が見えないようにする）
-        const xPos = -25 + self.progress * 20;
-        const yPos = -15 + self.progress * 8;  // -15% ~ -7%
-
-        ribbonMask.style.webkitMaskPosition = `${xPos}% ${yPos}%`;
-        ribbonMask.style.maskPosition = `${xPos}% ${yPos}%`;
+        // SVG内のpathを水平移動（-100 ~ +100 SVG単位）
+        const xShift = -100 + self.progress * 200;
+        ribbonPath.setAttribute('transform', `translate(${xShift}, 0)`);
       },
     });
 
-    ScrollTrigger.create({
-      trigger: '.content-layer',
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 2,
-      onUpdate: (self) => {
-        // ★ 最小でも150%を維持して画面端をカバー
-        const scale = 150 + self.progress * 15; // 150% → 165%
-
-        ribbonMask.style.webkitMaskSize = `${scale}% 130%`;
-        ribbonMask.style.maskSize = `${scale}% 130%`;
-      },
-    });
+    // ★ mask-size / mask-position の操作は全て削除
+    // （インラインSVGなので不要）
   }
+
 
 
 
