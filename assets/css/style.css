@@ -171,8 +171,8 @@ button {
   mask-size: 150% 130%;
 
   /* ★ 中央配置に変更（左端の隙間を防止） */
-  -webkit-mask-position: -25% center;
-  mask-position: -25% center;
+  -webkit-mask-position: -5% center;
+  mask-position: -5% center;
 
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
@@ -579,8 +579,8 @@ button {
 /* Flow parts – 元の位置に戻す */
 .parts-handshake {
   width: clamp(100px, 16vw, 200px);
-  top: 40%;
-  right: -2%;
+  top: 10%;
+  right: 2%;
 }
 
 /* Contact parts – 元の位置に戻す */
