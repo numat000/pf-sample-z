@@ -143,7 +143,13 @@ button {
 
 
 /* ============================================
-   z-3: Ribbon Mask Layer
+   z-3: Ribbon Mask Layer (REVISED v2)
+   
+   修正ポイント:
+   1) mask-composite: destination-out に変更
+      → 「全面黒から、リボンSVGを切り抜く」= リボン部分が穴
+   2) mask-image の順序を修正
+      → 第1 = 全面黒（ベース）、第2 = リボンSVG（切り抜き）
    ============================================ */
 .ribbon-mask-layer {
   position: fixed;
@@ -154,14 +160,32 @@ button {
   z-index: var(--z-mask);
   opacity: 0;
   pointer-events: none;
-  background: var(--color-bg);
-  will-change: opacity;
+  will-change: opacity, transform;
 
-  /* SVGマスク: 白部分=覆い / 黒部分=穴(動画が見える) */
-  -webkit-mask-image: url('../mask/ribbon_mask.svg');
-  mask-image: url('../mask/ribbon_mask.svg');
-  -webkit-mask-size: cover;
-  mask-size: cover;
+  /* 背景色: 黒い覆い */
+  background: var(--color-bg);
+
+  /*
+    ★ 修正: mask の考え方
+    - このレイヤーの background(黒) をマスクで制御
+    - マスクで「白い部分」= 黒い背景が表示される
+    - マスクで「黒い/透明部分」= 背景が非表示 = 下の動画が見える
+    
+    → リボン型の穴を開けるには:
+      全面白(=全面黒を表示) から、リボン部分を透明にする
+    
+    方法: SVG反転 (リボン以外が白、リボン部分が黒)
+    → SVG側で反転させるのが最も確実
+  */
+  -webkit-mask-image: url('../mask/ribbon_mask_inverted.svg');
+  mask-image: url('../mask/ribbon_mask_inverted.svg');
+
+  -webkit-mask-size: 130% 120%;
+  mask-size: 130% 120%;
+
+  -webkit-mask-position: -15% center;
+  mask-position: -15% center;
+
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
