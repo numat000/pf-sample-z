@@ -522,7 +522,7 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
   });
 
 
-  /* ──────────────────────────────────────────
+    /* ──────────────────────────────────────────
      14. Flow - Step Stagger + Line Draw
      ────────────────────────────────────────── */
   // ステップの順次出現
@@ -538,25 +538,29 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
     },
   });
 
-  // SVGライン描画アニメーション
-  const flowLinePath = document.querySelector('.flow-line path');
+  // ★ CSS縦線のスクロールアニメーション（scaleY: 0→1）
+  const flowTimeline = document.querySelector('.flow-timeline');
+  
+  if (flowTimeline) {
+    // GSAP で ::before の scaleY を直接制御はできないため、
+    // CSS transition + クラス付与 でアニメーションする
+    // → 線は CSS transition で滑らかに伸びる
+    
+    // CSS に transition を追加するため style 上書き
+    const style = document.createElement('style');
+    style.textContent = `
+      .flow-timeline::before {
+        transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+    `;
+    document.head.appendChild(style);
 
-  if (flowLinePath) {
-    const pathLength = flowLinePath.getTotalLength();
-
-    gsap.set(flowLinePath, {
-      strokeDasharray: pathLength,
-      strokeDashoffset: pathLength,
-    });
-
-    gsap.to(flowLinePath, {
-      strokeDashoffset: 0,
-      ease: 'power2.inOut',
-      scrollTrigger: {
-        trigger: '.flow-timeline',
-        start: 'top 55%',
-        end: 'bottom 70%',
-        scrub: 1,
+    ScrollTrigger.create({
+      trigger: '.flow-timeline',
+      start: 'top 55%',
+      once: true,
+      onEnter: () => {
+        flowTimeline.classList.add('line-drawn');
       },
     });
   }
