@@ -539,7 +539,7 @@ button {
 /* Concept parts – 元の位置に戻す */
 .parts-pen-hand {
   width: clamp(100px, 18vw, 220px);
-  top: 10%;
+  top: -5%;
   left: 30%;
 }
 
