@@ -11,6 +11,11 @@
      ────────────────────────────────────────── */
   gsap.registerPlugin(ScrollTrigger);
 
+ /* ──────────────────────────────────────────
+     0.5. Mobile Detection (★ 先頭に移動)
+     ────────────────────────────────────────── */
+const isMobile = window.matchMedia('(max-width: 767px)').matches;
+
   /* ──────────────────────────────────────────
      1. Lenis Smooth Scroll
      ────────────────────────────────────────── */
@@ -821,7 +826,6 @@
   /* ──────────────────────────────────────────
      19. Mobile Optimizations
      ────────────────────────────────────────── */
-  const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
   if (isMobile) {
     // 発光動画: モバイルでは静止グラデーションに切替
