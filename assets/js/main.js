@@ -320,7 +320,7 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
     },
   });
 
-    /* ──────────────────────────────────────────
+   /* ──────────────────────────────────────────
      8.5. Glow Ribbon - Scroll Position Shift
      ────────────────────────────────────────── */
   const ribbonMask = document.querySelector('.ribbon-mask-layer');
@@ -332,12 +332,12 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
       end: 'bottom bottom',
       scrub: 3,
       onUpdate: (self) => {
-        const xPos = -15 + self.progress * 30; // -15% ~ +15%
-        const yPos = self.progress * 8;
+        // ★ 移動範囲を -25% ~ -5% に制限（端が見えないようにする）
+        const xPos = -25 + self.progress * 20;
+        const yPos = -15 + self.progress * 8;  // -15% ~ -7%
 
-        // ★ 単一マスクなので , 区切りは不要
-        ribbonMask.style.webkitMaskPosition = `${xPos}% ${50 + yPos}%`;
-        ribbonMask.style.maskPosition = `${xPos}% ${50 + yPos}%`;
+        ribbonMask.style.webkitMaskPosition = `${xPos}% ${yPos}%`;
+        ribbonMask.style.maskPosition = `${xPos}% ${yPos}%`;
       },
     });
 
@@ -347,14 +347,15 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
       end: 'bottom bottom',
       scrub: 2,
       onUpdate: (self) => {
-        const scale = 130 + self.progress * 20; // 130% → 150%
+        // ★ 最小でも150%を維持して画面端をカバー
+        const scale = 150 + self.progress * 15; // 150% → 165%
 
-        // ★ 単一マスクなので , 区切りは不要
-        ribbonMask.style.webkitMaskSize = `${scale}% 120%`;
-        ribbonMask.style.maskSize = `${scale}% 120%`;
+        ribbonMask.style.webkitMaskSize = `${scale}% 130%`;
+        ribbonMask.style.maskSize = `${scale}% 130%`;
       },
     });
   }
+
 
 
   /* ──────────────────────────────────────────
