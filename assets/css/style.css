@@ -171,8 +171,8 @@ button {
   mask-size: 150% 130%;
 
   /* ★ 中央配置に変更（左端の隙間を防止） */
-  -webkit-mask-position: -5% center;
-  mask-position: -5% center;
+  -webkit-mask-position: -50% center;
+  mask-position: -50% center;
 
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
