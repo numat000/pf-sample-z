@@ -69,13 +69,15 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
   if (fvBgBlur) {
     gsap.to(fvBgBlur, {
-      filter: 'blur(10px) brightness(0.35)',
+      /* ★ brightness を 0.35 → 0.5 に上げた */
+      filter: 'blur(10px) brightness(0.5)',
       duration: 4,
       ease: 'sine.inOut',
       yoyo: true,
       repeat: -1,
     });
   }
+
 
 
   /* ──────────────────────────────────────────
@@ -318,48 +320,38 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
     },
   });
 
-  /* ──────────────────────────────────────────
+    /* ──────────────────────────────────────────
      8.5. Glow Ribbon - Scroll Position Shift
-     リボンマスクがスクロールに合わせて横移動
-     → 動きのある演出になる
      ────────────────────────────────────────── */
   const ribbonMask = document.querySelector('.ribbon-mask-layer');
 
   if (ribbonMask) {
-    // リボンの mask-position をスクロールに連動して左右に動かす
-    // → 「穴」の位置がゆっくり移動し、見える動画の領域が変化する
     ScrollTrigger.create({
       trigger: '.content-layer',
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 3, // 重めのscrubでゆったり追従
+      scrub: 3,
       onUpdate: (self) => {
-        // スクロール進行 0→1 に対して、mask-positionを -10% → 10% に移動
-        const xPos = -10 + self.progress * 20; // -10% ~ +10%
-        const yPos = self.progress * 5;        // 0% ~ 5% (微かに上下も)
+        const xPos = -15 + self.progress * 30; // -15% ~ +15%
+        const yPos = self.progress * 8;
 
-        ribbonMask.style.webkitMaskPosition =
-          `${xPos}% ${50 + yPos}%, center center`;
-        ribbonMask.style.maskPosition =
-          `${xPos}% ${50 + yPos}%, center center`;
+        // ★ 単一マスクなので , 区切りは不要
+        ribbonMask.style.webkitMaskPosition = `${xPos}% ${50 + yPos}%`;
+        ribbonMask.style.maskPosition = `${xPos}% ${50 + yPos}%`;
       },
     });
 
-
-    // リボンのスケールもスクロールで微変化
-    // → 下に行くほどリボンが少し大きくなる
     ScrollTrigger.create({
       trigger: '.content-layer',
       start: 'top top',
       end: 'bottom bottom',
       scrub: 2,
       onUpdate: (self) => {
-        const scale = 120 + self.progress * 15; // 120% → 135%
+        const scale = 130 + self.progress * 20; // 130% → 150%
 
-        ribbonMask.style.webkitMaskSize =
-          `${scale}% 100%, 100% 100%`;
-        ribbonMask.style.maskSize =
-          `${scale}% 100%, 100% 100%`;
+        // ★ 単一マスクなので , 区切りは不要
+        ribbonMask.style.webkitMaskSize = `${scale}% 120%`;
+        ribbonMask.style.maskSize = `${scale}% 120%`;
       },
     });
   }
@@ -864,20 +856,17 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
   /* ──────────────────────────────────────────
      19.5. Mobile - Ribbon Mask Fallback
-     モバイルではmask-compositeのサポートが不安定な場合があるため
-     シンプルなグラデーションマスクに切り替え
      ────────────────────────────────────────── */
   if (isMobile) {
     if (ribbonMask) {
-      // SVGマスクの代わりにグラデーションで簡略化
+      // ★ 単一マスクに変更（mask-composite不要）
       ribbonMask.style.webkitMaskImage =
-        'linear-gradient(135deg, transparent 30%, black 30%, black 60%, transparent 60%)';
+        'linear-gradient(135deg, black 0%, black 30%, transparent 35%, transparent 55%, black 60%, black 100%)';
       ribbonMask.style.maskImage =
-        'linear-gradient(135deg, transparent 30%, black 30%, black 60%, transparent 60%)';
-      ribbonMask.style.webkitMaskComposite = 'initial';
-      ribbonMask.style.maskComposite = 'initial';
+        'linear-gradient(135deg, black 0%, black 30%, transparent 35%, transparent 55%, black 60%, black 100%)';
     }
   }
+
 
   /* ──────────────────────────────────────────
      20. Mobile Nav Toggle
