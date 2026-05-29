@@ -341,60 +341,13 @@ button {
 
 /* ============================================
    Section Background Opacity Control
-   (Controls visibility of ribbon through sections)
-   ★ margin/gap を消し、隣接セクションが重なるように
+   ★ セクション間の隙間を完全に消すため、
+     隣接セクションを1px重ねる
    ============================================ */
 .section-fv {
   background: transparent;
 }
 
-.section-concept {
-  background: rgba(10, 10, 15, 0.6);
-  /* ★ 隙間を消す: 上にわずかにはみ出す */
-  margin-top: -1px;
-  padding-top: 1px;
-}
-
-.section-service {
-  background: rgba(10, 10, 15, 0.6);
-  margin-top: -1px;
-  padding-top: 1px;
-}
-
-.section-works {
-  background: rgba(10, 10, 15, 1);
-  margin-top: -1px;
-  padding-top: 1px;
-}
-
-.section-voice {
-  background: rgba(10, 10, 15, 0.6);
-  margin-top: -1px;
-  padding-top: 1px;
-}
-
-.section-flow {
-  background: rgba(10, 10, 15, 0.7);
-  margin-top: -1px;
-  padding-top: 1px;
-}
-
-.section-faq {
-  background: rgba(10, 10, 15, 1);
-  margin-top: -1px;
-  padding-top: 1px;
-}
-
-.section-contact {
-  background: rgba(10, 10, 15, 0.7);
-  margin-top: -1px;
-  padding-top: 1px;
-}
-
-/* ============================================
-   Section Gap Killer
-   サブピクセルレンダリングによるセクション間隙間を完全に消す
-   ============================================ */
 .section-concept,
 .section-service,
 .section-works,
@@ -405,7 +358,38 @@ button {
   position: relative;
 }
 
-/* 上辺に同色の影を被せて隙間を見えなくする */
+.section-concept {
+  background: rgba(10, 10, 15, 0.6);
+}
+
+.section-service {
+  background: rgba(10, 10, 15, 0.6);
+}
+
+.section-works {
+  background: var(--color-bg);  /* 完全不透明 */
+}
+
+.section-voice {
+  background: rgba(10, 10, 15, 0.6);
+}
+
+.section-flow {
+  background: rgba(10, 10, 15, 0.7);
+}
+
+.section-faq {
+  background: var(--color-bg);  /* 完全不透明 */
+}
+
+.section-contact {
+  background: rgba(10, 10, 15, 0.7);
+}
+
+/* ============================================
+   Section Gap Killer
+   ★ 修正: inherit ではなく固定色の不透明黒で隙間を塗りつぶす
+   ============================================ */
 .section-concept::before,
 .section-service::before,
 .section-works::before,
@@ -416,13 +400,15 @@ button {
   content: '';
   position: absolute;
   top: -2px;
-  left: 0;
-  width: 100%;
+  left: -1px;          /* ★ 左端も1pxはみ出す */
+  width: calc(100% + 2px); /* ★ 左右1pxずつ広げる */
   height: 4px;
-  background: inherit;
+  background: #0a0a0f;  /* ★ inherit ではなく固定の不透明色 */
   z-index: 1;
   pointer-events: none;
 }
+
+
 
 
 /* ============================================
@@ -564,7 +550,7 @@ button {
   will-change: transform;
 }
 
-/* Concept parts */
+/* Concept parts – 元の位置に戻す */
 .parts-pen-hand {
   width: clamp(100px, 18vw, 220px);
   top: 10%;
@@ -580,11 +566,10 @@ button {
 /* Service parts */
 .parts-pc-arm {
   width: clamp(120px, 20vw, 260px);
-  /* ★ カードに被らないよう下・左にずらす */
-  bottom: -8%;
-  left: -12%;
+  /* ★ 新しい位置: カードの左下外側に配置 */
+  bottom: 2%;
+  left: -10%;
 }
-
 
 .parts-design-tool {
   width: clamp(80px, 12vw, 160px);
@@ -592,7 +577,7 @@ button {
   right: 3%;
 }
 
-/* Voice parts */
+/* Voice parts – 元の位置に戻す */
 .parts-smartphone {
   width: clamp(80px, 14vw, 180px);
   top: 5%;
@@ -605,14 +590,14 @@ button {
   left: 3%;
 }
 
-/* Flow parts */
+/* Flow parts – 元の位置に戻す */
 .parts-handshake {
   width: clamp(100px, 16vw, 200px);
   top: 40%;
   right: -2%;
 }
 
-/* Contact parts */
+/* Contact parts – 元の位置に戻す */
 .parts-keyboard {
   width: clamp(100px, 16vw, 200px);
   bottom: 20%;
@@ -830,16 +815,15 @@ button {
   padding-left: 40px;
 }
 
-/* ★ ドットを繋ぐ縦線（CSSで描画） */
-.flow-timeline::before {
+/* ★ ドットを繋ぐ縦線 */
+.flow-timeline::after {
   content: '';
   position: absolute;
-  /* ドットの中心 X = -34px + 5px = -29px → padding-left 40px 基準で left: 6px */
-  left: 6px;
-  top: 6px;       /* 最初のドットの中心と合わせる */
-  bottom: 60px;   /* 最後のステップのpadding-bottom分を引く */
+  left: 10px;      /* ドット中心 = 6px + 5px(半径) - 1px(線幅の半分) = 10px */
+  top: 11px;       /* 最初のドットの中心と合わせる (6px top + 5px半径) */
   width: 2px;
-  /* ★ グラデーションライン */
+  /* ★ 高さを calc で算出。bottom ではなく height で明示 */
+  bottom: 65px;    /* 最後のステップの padding-bottom 分 + ドット半径 */
   background: linear-gradient(
     to bottom,
     var(--color-accent-1),
@@ -847,18 +831,18 @@ button {
     var(--color-accent-3)
   );
   border-radius: 1px;
-  /* ★ 初期状態: scaleY(0) にしてスクロールで伸ばす */
   transform: scaleY(0);
   transform-origin: top;
   will-change: transform;
-  /* ★ 発光エフェクト */
-  box-shadow: 
+  box-shadow:
     0 0 6px rgba(168, 85, 247, 0.4),
     0 0 12px rgba(168, 85, 247, 0.2);
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* スクロールで線が伸びた状態 */
-.flow-timeline.line-drawn::before {
+.flow-timeline.line-drawn::after {
   transform: scaleY(1);
 }
 
@@ -868,7 +852,6 @@ button {
   padding-left: 20px;
 }
 
-/* ★ ドット（位置はそのまま、z-index を線の上にする） */
 .flow-step::before {
   content: '';
   position: absolute;
@@ -902,6 +885,7 @@ button {
   color: var(--color-text-muted);
   line-height: 1.9;
 }
+
 
 
 /* ============================================
@@ -1353,11 +1337,9 @@ section:hover .floating-part {
 
 /* ============================================
    Floating Parts - Position Fine-Tuning (Phase 4)
-   各パーツの位置・サイズをセクションレイアウトに
-   合わせて微調整
    ============================================ */
 
-/* --- 02. Concept --- */
+/* --- 02. Concept --- 元の位置に戻す */
 .parts-pen-hand {
   width: clamp(120px, 20vw, 260px);
   top: 8%;
@@ -1375,12 +1357,11 @@ section:hover .floating-part {
 /* --- 03. Service --- */
 .parts-pc-arm {
   width: clamp(140px, 22vw, 300px);
-  /* ★ カードに被らないよう下・左にずらす */
-  bottom: -10%;
-  left: -14%;
+  /* ★ カード左下の外側。見切れないようにする */
+  bottom: 2%;
+  left: -10%;
   transform: rotate(-5deg);
 }
-
 
 .parts-design-tool {
   width: clamp(90px, 14vw, 180px);
@@ -1389,7 +1370,7 @@ section:hover .floating-part {
   transform: rotate(12deg);
 }
 
-/* --- 05. Voice --- */
+/* --- 05. Voice --- 元の位置に戻す */
 .parts-smartphone {
   width: clamp(100px, 16vw, 200px);
   top: 3%;
@@ -1404,7 +1385,7 @@ section:hover .floating-part {
   transform: rotate(-6deg);
 }
 
-/* --- 06. Flow --- */
+/* --- 06. Flow --- 元の位置に戻す */
 .parts-handshake {
   width: clamp(120px, 18vw, 240px);
   top: 35%;
@@ -1412,13 +1393,14 @@ section:hover .floating-part {
   transform: rotate(3deg);
 }
 
-/* --- 08. Contact --- */
+/* --- 08. Contact --- 元の位置に戻す */
 .parts-keyboard {
   width: clamp(120px, 18vw, 220px);
   bottom: 15%;
   left: 3%;
   transform: rotate(-3deg);
 }
+
 
 
 /* ============================================
