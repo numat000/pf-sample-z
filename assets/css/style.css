@@ -147,9 +147,9 @@ button {
 
 
 /* ============================================
-   z-3: Ribbon Mask Layer (REVISED - Phase 3)
-   mask-composite方式:
-   ...
+   z-3: Ribbon Mask Layer (inline SVG方式)
+   ★ SVGマスクをやめ、インラインSVGで直接描画
+   → 画面中央に確実にフィット、ズレなし
    ============================================ */
 .ribbon-mask-layer {
   position: fixed;
@@ -160,22 +160,8 @@ button {
   z-index: var(--z-mask);
   opacity: 0;
   pointer-events: none;
-  will-change: opacity, transform;
-  background: var(--color-bg);
-
-  -webkit-mask-image: url('../mask/ribbon_mask_inverted.svg');
-  mask-image: url('../mask/ribbon_mask_inverted.svg');
-
-  /* ★ サイズを 150% x 130% に拡大して画面全体を確実にカバー */
-  -webkit-mask-size: 150% 130%;
-  mask-size: 150% 130%;
-
-  /* ★ 中央配置に変更（左端の隙間を防止） */
-  -webkit-mask-position: -50% center;
-  mask-position: -50% center;
-
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
+  will-change: opacity;
+  /* ★ mask-image は一切使わない */
 }
 
 
