@@ -522,7 +522,7 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
   });
 
 
-    /* ──────────────────────────────────────────
+  /* ──────────────────────────────────────────
      14. Flow - Step Stagger + Line Draw
      ────────────────────────────────────────── */
   // ステップの順次出現
@@ -538,22 +538,19 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
     },
   });
 
-  // ★ CSS縦線のスクロールアニメーション（scaleY: 0→1）
+  // ★ CSS縦線のスクロールアニメーション
+  // ::after を使用（::before はセクションGap Killerで使用済み）
   const flowTimeline = document.querySelector('.flow-timeline');
-  
+
   if (flowTimeline) {
-    // GSAP で ::before の scaleY を直接制御はできないため、
-    // CSS transition + クラス付与 でアニメーションする
-    // → 線は CSS transition で滑らかに伸びる
-    
-    // CSS に transition を追加するため style 上書き
-    const style = document.createElement('style');
-    style.textContent = `
-      .flow-timeline::before {
+    // transition を追加
+    const flowStyle = document.createElement('style');
+    flowStyle.textContent = `
+      .flow-timeline::after {
         transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);
       }
     `;
-    document.head.appendChild(style);
+    document.head.appendChild(flowStyle);
 
     ScrollTrigger.create({
       trigger: '.flow-timeline',
@@ -564,6 +561,7 @@ const isMobile = window.matchMedia('(max-width: 767px)').matches;
       },
     });
   }
+
 
 
   /* ──────────────────────────────────────────
