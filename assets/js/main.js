@@ -6,9 +6,13 @@
 
   gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, MorphSVGPlugin);
 
+  /* ── 0.5 モバイル判定（先頭で宣言 — 後方セクションで参照されるため） ── */
   const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
-  /* 1. Lenis Smooth Scroll */
+
+  /* ══════════════════════════════════════════
+     1. Lenis Smooth Scroll
+     ══════════════════════════════════════════ */
   const lenis = new Lenis({
     duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -16,7 +20,9 @@
     smooth: true,
   });
 
-  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
   gsap.ticker.lagSmoothing(0);
 
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -27,7 +33,10 @@
     });
   });
 
-  /* 2. Header Scroll State */
+
+  /* ══════════════════════════════════════════
+     2. Header Scroll State
+     ══════════════════════════════════════════ */
   const header = document.querySelector('.site-header');
   ScrollTrigger.create({
     start: 'top -80',
@@ -37,21 +46,36 @@
     },
   });
 
-  /* 3. FV - Background Blur Breathing */
+
+  /* ══════════════════════════════════════════
+     3. FV - Background Blur Breathing
+     ══════════════════════════════════════════ */
   const fvBgBlur = document.querySelector('.fv-bg-blur');
   if (fvBgBlur) {
     gsap.to(fvBgBlur, {
       filter: 'blur(10px) brightness(0.5)',
-      duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1,
+      duration: 4,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1,
     });
   }
 
-  /* 4. FV - Swiper Slide Controller */
+
+  /* ══════════════════════════════════════════
+     4. FV - Swiper Slide Controller
+        0.5s×4枚 → 1.8s停止×1枚 → ループ
+        停止スライドがサイクルごとにローテーション
+     ══════════════════════════════════════════ */
   class FVSlideController {
     constructor() {
       this.swiper = new Swiper('.fv-slides', {
-        effect: 'fade', fadeEffect: { crossFade: true },
-        speed: 300, loop: true, allowTouchMove: false, autoplay: false,
+        effect: 'fade',
+        fadeEffect: { crossFade: true },
+        speed: 300,
+        loop: true,
+        allowTouchMove: false,
+        autoplay: false,
       });
       this.totalSlides = 6;
       this.fastDuration = 0.5;
@@ -63,41 +87,109 @@
       this.timeoutId = null;
       this.start();
     }
-    start() { this.runStep(); }
+
+    start() {
+      this.runStep();
+    }
+
     runStep() {
       if (!this.isRunning) return;
       const isLast = this.currentStep === this.cycleLength - 1;
       const hold = isLast ? this.pauseDuration : this.fastDuration;
       this.swiper.slideNext();
+
       this.timeoutId = setTimeout(() => {
-        if (isLast) { this.currentStep = 0; this.cycleCount++; }
-        else { this.currentStep++; }
+        if (isLast) {
+          this.currentStep = 0;
+          this.cycleCount++;
+        } else {
+          this.currentStep++;
+        }
         this.runStep();
       }, hold * 1000);
     }
-    pause() { this.isRunning = false; if (this.timeoutId) clearTimeout(this.timeoutId); }
-    resume() { if (!this.isRunning) { this.isRunning = true; this.runStep(); } }
+
+    pause() {
+      this.isRunning = false;
+      if (this.timeoutId) clearTimeout(this.timeoutId);
+    }
+
+    resume() {
+      if (!this.isRunning) {
+        this.isRunning = true;
+        this.runStep();
+      }
+    }
   }
 
   const fvSlideController = new FVSlideController();
+
   ScrollTrigger.create({
-    trigger: '.section-fv', start: 'top top', end: 'bottom top',
+    trigger: '.section-fv',
+    start: 'top top',
+    end: 'bottom top',
     onLeave: () => fvSlideController.pause(),
     onEnterBack: () => fvSlideController.resume(),
   });
 
-  /* 5. FV - Text Entrance */
+
+  /* ══════════════════════════════════════════
+     5. FV - Text Entrance
+     ══════════════════════════════════════════ */
   const fvTL = gsap.timeline({ delay: 0.3 });
   fvTL
     .from('.fv-title-main', { opacity: 0, y: 50, duration: 1.4, ease: 'power3.out' })
     .from('.fv-subtitle', { opacity: 0, y: 25, duration: 1.0, ease: 'power3.out' }, '-=0.8')
     .from('.fv-scroll-indicator', { opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.4');
 
-  /* 6. FV - Scroll Fade Out */
+
+  /* ══════════════════════════════════════════
+     6. FV - Scroll Fade Out
+     ══════════════════════════════════════════ */
   gsap.to('.fv-content', {
-    opacity: 0, y: -60,
-    scrollTrigger: { trigger: '.section-fv', start: 'top top', end: 'bottom top', scrub: 1.5 },
+    opacity: 0,
+    y: -60,
+    scrollTrigger: {
+      trigger: '.section-fv',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1.5,
+    },
   });
+
+
+  /* ══════════════════════════════════════════
+     7. z-2 & z-3: Glow Video & Ribbon Opacity Control
+        セクションに応じて発光動画とリボンの表示/非表示
+     ══════════════════════════════════════════ */
+  const glowLayer = document.querySelector('.glow-video-layer');
+  const ribbonLayer = document.querySelector('.ribbon-mask-layer');
+
+  if (glowLayer && ribbonLayer) {
+    /* Concept〜Service 区間で表示 */
+    ScrollTrigger.create({
+      trigger: '.section-concept',
+      start: 'top 80%',
+      endTrigger: '.section-works',
+      end: 'top 20%',
+      onEnter:     () => { gsap.to(glowLayer, { opacity: 0.6, duration: 1.2 }); gsap.to(ribbonLayer, { opacity: 1, duration: 1.2 }); },
+      onLeave:     () => { gsap.to(glowLayer, { opacity: 0,   duration: 0.8 }); gsap.to(ribbonLayer, { opacity: 0, duration: 0.8 }); },
+      onEnterBack: () => { gsap.to(glowLayer, { opacity: 0.6, duration: 1.2 }); gsap.to(ribbonLayer, { opacity: 1, duration: 1.2 }); },
+      onLeaveBack: () => { gsap.to(glowLayer, { opacity: 0,   duration: 0.8 }); gsap.to(ribbonLayer, { opacity: 0, duration: 0.8 }); },
+    });
+
+    /* Voice〜Flow 区間で再表示 */
+    ScrollTrigger.create({
+      trigger: '.section-voice',
+      start: 'top 80%',
+      endTrigger: '.section-faq',
+      end: 'top 20%',
+      onEnter:     () => { gsap.to(glowLayer, { opacity: 0.4, duration: 1.2 }); gsap.to(ribbonLayer, { opacity: 0.8, duration: 1.2 }); },
+      onLeave:     () => { gsap.to(glowLayer, { opacity: 0,   duration: 0.8 }); gsap.to(ribbonLayer, { opacity: 0,   duration: 0.8 }); },
+      onEnterBack: () => { gsap.to(glowLayer, { opacity: 0.4, duration: 1.2 }); gsap.to(ribbonLayer, { opacity: 0.8, duration: 1.2 }); },
+      onLeaveBack: () => { gsap.to(glowLayer, { opacity: 0,   duration: 0.8 }); gsap.to(ribbonLayer, { opacity: 0,   duration: 0.8 }); },
+    });
+  }
 
 
   /* ══════════════════════════════════════════
@@ -106,12 +198,12 @@
 
   /* B1. セクション止まり蝶 */
   const sectionButterflyMap = [
-    { butterfly: '.sb-concept',  trigger: '.section-concept' },
-    { butterfly: '.sb-service',  trigger: '.section-service' },
-    { butterfly: '.sb-works',    trigger: '.section-works' },
-    { butterfly: '.sb-voice',    trigger: '.section-voice' },
-    { butterfly: '.sb-flow',     trigger: '.section-flow' },
-    { butterfly: '.sb-faq',      trigger: '.section-faq' },
+    { butterfly: '.sb-concept', trigger: '.section-concept' },
+    { butterfly: '.sb-service', trigger: '.section-service' },
+    { butterfly: '.sb-works',   trigger: '.section-works' },
+    { butterfly: '.sb-voice',   trigger: '.section-voice' },
+    { butterfly: '.sb-flow',    trigger: '.section-flow' },
+    { butterfly: '.sb-faq',     trigger: '.section-faq' },
   ];
 
   sectionButterflyMap.forEach(({ butterfly, trigger }) => {
@@ -120,35 +212,46 @@
 
     /* フェードイン */
     gsap.to(el, {
-      opacity: 0.7, duration: 1.2, ease: 'power2.out',
+      opacity: 0.7,
+      duration: 1.2,
+      ease: 'power2.out',
       scrollTrigger: { trigger: trigger, start: 'top 70%', end: 'top 30%', scrub: 1 },
     });
 
     /* フェードアウト */
     gsap.to(el, {
-      opacity: 0, duration: 1.2, ease: 'power2.in',
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power2.in',
       scrollTrigger: { trigger: trigger, start: 'bottom 70%', end: 'bottom 30%', scrub: 1 },
     });
 
     /* ゆらゆら浮遊 */
     gsap.to(el, {
-      y: '+=12', x: '+=5', rotation: 3,
+      y: '+=12',
+      x: '+=5',
+      rotation: 3,
       duration: 3 + Math.random() * 2,
-      ease: 'sine.inOut', yoyo: true, repeat: -1,
+      ease: 'sine.inOut',
+      yoyo: true,
+      repeat: -1,
     });
   });
+
 
   /* B2. スクロール連動の飛ぶ蝶（Service→Works間） */
   const flyingBf1 = document.querySelector('.fb-service-works');
   if (flyingBf1) {
     gsap.timeline({
       scrollTrigger: {
-        trigger: '.section-service', start: 'bottom 80%',
-        endTrigger: '.section-works', end: 'top 20%',
+        trigger: '.section-service',
+        start: 'bottom 80%',
+        endTrigger: '.section-works',
+        end: 'top 20%',
         scrub: 2,
-        onEnter: () => { flyingBf1.style.opacity = 1; },
+        onEnter:     () => { flyingBf1.style.opacity = 1; },
         onLeaveBack: () => { flyingBf1.style.opacity = 0; },
-        onLeave: () => { flyingBf1.style.opacity = 0; },
+        onLeave:     () => { flyingBf1.style.opacity = 0; },
         onEnterBack: () => { flyingBf1.style.opacity = 1; },
       },
     })
@@ -161,23 +264,28 @@
           { x: window.innerWidth * 0.7, y: -120 },
           { x: window.innerWidth * 0.6, y: -200 },
         ],
-        curviness: 1.5, autoRotate: false,
+        curviness: 1.5,
+        autoRotate: false,
       },
-      duration: 1, ease: 'none',
+      duration: 1,
+      ease: 'none',
     });
   }
 
-  /* B3. モーフィング演出（FAQ→Contact間） */
+
+  /* B3. モーフィング演出（FAQ→Contact間）— SVG path transform方式 */
   const morphWrapper = document.querySelector('.morph-stage-wrapper');
-  const morphPath = document.querySelector('#morph-path');
-  const morphTarget = document.querySelector('#morph-target-butterfly');
+  const morphPath    = document.querySelector('#morph-path');
+  const morphTarget  = document.querySelector('#morph-target-butterfly');
   const morphBlackout = document.querySelector('.morph-blackout');
 
   if (morphWrapper && morphPath && morphTarget && morphBlackout) {
     const morphTL = gsap.timeline({
       scrollTrigger: {
-        trigger: '.section-faq', start: 'bottom 90%',
-        endTrigger: '.section-contact', end: 'top 10%',
+        trigger: '.section-faq',
+        start: 'bottom 90%',
+        endTrigger: '.section-contact',
+        end: 'top 10%',
         scrub: 2,
       },
     });
@@ -185,9 +293,15 @@
     morphTL
       .to(morphWrapper, { opacity: 1, duration: 0.15, ease: 'power2.out' })
       .to(morphPath, {
-        morphSVG: { shape: morphTarget, type: 'rotational', origin: '50% 50%' },
-        fill: 'rgba(100,50,160,0.7)', stroke: 'rgba(100,50,160,0.7)',
-        duration: 0.4, ease: 'power2.inOut',
+        morphSVG: {
+          shape: morphTarget,
+          type: 'rotational',
+          origin: '50% 50%',
+        },
+        fill: 'rgba(100,50,160,0.7)',
+        stroke: 'rgba(100,50,160,0.7)',
+        duration: 0.4,
+        ease: 'power2.inOut',
       })
       .to('.morph-svg', { y: -50, scale: 1.2, duration: 0.15, ease: 'power2.out' })
       .to(morphBlackout, { opacity: 1, duration: 0.3, ease: 'power2.in' })
@@ -201,13 +315,19 @@
 
   /* 9. Section Labels */
   gsap.utils.toArray('.section-number').forEach((el) => {
-    gsap.from(el, { opacity: 0, x: -20, duration: 0.7, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 85%' } });
+    gsap.from(el, {
+      opacity: 0, x: -20, duration: 0.7, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 85%' },
+    });
   });
+
   gsap.utils.toArray('.section-name').forEach((el) => {
-    gsap.from(el, { opacity: 0, y: 20, duration: 0.8, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 85%' } });
+    gsap.from(el, {
+      opacity: 0, y: 20, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 85%' },
+    });
   });
+
 
   /* 10. Concept Text */
   const conceptLead = document.querySelector('.concept-text--lead');
@@ -218,10 +338,14 @@
       scrollTrigger: { trigger: conceptLead, start: 'top 75%', end: 'bottom 60%', scrub: 1 },
     });
   }
+
   gsap.utils.toArray('.concept-text--body p').forEach((p) => {
-    gsap.from(p, { opacity: 0, y: 30, duration: 0.8, ease: 'power3.out',
-      scrollTrigger: { trigger: p, start: 'top 80%' } });
+    gsap.from(p, {
+      opacity: 0, y: 30, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: p, start: 'top 80%' },
+    });
   });
+
 
   /* 11. Service Cards */
   gsap.from('.service-card', {
@@ -229,29 +353,42 @@
     scrollTrigger: { trigger: '.service-grid', start: 'top 70%' },
   });
 
+
   /* 12. Works Horizontal Scroll */
-  const worksTrack = document.querySelector('.works-track');
+  const worksTrack   = document.querySelector('.works-track');
   const worksSection = document.querySelector('.section-works');
   if (worksTrack && worksSection) {
     gsap.to(worksTrack, {
       x: () => -(worksTrack.scrollWidth - window.innerWidth + 100),
       ease: 'none',
       scrollTrigger: {
-        trigger: worksSection, start: 'top top',
+        trigger: worksSection,
+        start: 'top top',
         end: () => `+=${worksTrack.scrollWidth - window.innerWidth}`,
-        scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true,
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
       },
     });
   }
 
+
   /* 13. Voice Swiper */
   new Swiper('.voice-slider', {
-    effect: 'fade', fadeEffect: { crossFade: true }, speed: 800,
+    effect: 'fade',
+    fadeEffect: { crossFade: true },
+    speed: 800,
     autoplay: { delay: 6000, disableOnInteraction: true },
-    loop: true, pagination: { el: '.voice-pagination', clickable: true },
+    loop: true,
+    pagination: { el: '.voice-pagination', clickable: true },
   });
-  gsap.from('.voice-slider', { opacity: 0, y: 50, duration: 1, ease: 'power3.out',
-    scrollTrigger: { trigger: '.section-voice', start: 'top 65%' } });
+
+  gsap.from('.voice-slider', {
+    opacity: 0, y: 50, duration: 1, ease: 'power3.out',
+    scrollTrigger: { trigger: '.section-voice', start: 'top 65%' },
+  });
+
 
   /* 14. Flow Timeline */
   gsap.from('.flow-step', {
@@ -259,24 +396,32 @@
     scrollTrigger: { trigger: '.flow-timeline', start: 'top 65%' },
   });
 
+  /* Flow接続線 — ::after transition方式 */
   const flowTimeline = document.querySelector('.flow-timeline');
   if (flowTimeline) {
     const s = document.createElement('style');
     s.textContent = '.flow-timeline::after { transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1); }';
     document.head.appendChild(s);
+
     ScrollTrigger.create({
-      trigger: '.flow-timeline', start: 'top 55%', once: true,
-      onEnter: () => { flowTimeline.classList.add('line-drawn'); },
+      trigger: '.flow-timeline',
+      start: 'top 55%',
+      once: true,
+      onEnter: () => {
+        flowTimeline.classList.add('line-drawn');
+      },
     });
   }
+
 
   /* 15. FAQ Accordion */
   document.querySelectorAll('.faq-question').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const item = btn.parentElement;
+      const item   = btn.parentElement;
       const answer = item.querySelector('.faq-answer');
       const isOpen = item.classList.contains('is-open');
 
+      /* 他を閉じる */
       document.querySelectorAll('.faq-item.is-open').forEach((openItem) => {
         if (openItem !== item) {
           openItem.classList.remove('is-open');
@@ -295,14 +440,16 @@
     });
   });
 
+
   /* 16. Contact CTA */
   gsap.from('.contact-content', {
     opacity: 0, y: 40, duration: 1, ease: 'power3.out',
     scrollTrigger: { trigger: '.section-contact', start: 'top 65%' },
   });
 
+
   /* 17. Mobile Nav Toggle */
-  const navToggle = document.querySelector('.nav-toggle');
+  const navToggle    = document.querySelector('.nav-toggle');
   const mobileOverlay = document.querySelector('.mobile-nav-overlay');
   if (navToggle && mobileOverlay) {
     navToggle.addEventListener('click', () => {
@@ -326,6 +473,7 @@
       });
     });
   }
+
 
   /* 18. Page Load */
   window.addEventListener('load', () => {
