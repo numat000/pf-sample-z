@@ -24,8 +24,10 @@
   --content-max-width: 1200px;
 
   --z-bg:      1;
-  --z-morph:   5;
+  --z-glow:    2;
+  --z-ribbon:  3;
   --z-content: 4;
+  --z-morph:   5;
   --z-header:  100;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -99,6 +101,50 @@ button { background: none; border: none; color: inherit; font: inherit; cursor: 
   width: 100%;
   height: 100%;
   background: rgba(10, 10, 15, 0.3);
+}
+
+
+/* ============================================
+   z-2: Glow Gradient Video Layer
+   ============================================ */
+.glow-video-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: var(--z-glow);
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.glow-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* ============================================
+   z-3: Ribbon Mask Layer (Inline SVG方式)
+   ============================================ */
+.ribbon-mask-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: var(--z-ribbon);
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.ribbon-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 
