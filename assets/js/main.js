@@ -838,38 +838,6 @@
   if (navToggle) {
     navToggle.addEventListener('click', () => {
       isNavOpen = !isNavOpen;
-
-      if (isNavOpen) {
-        mobileNav.classList.add('is-open');
-        navToggleText.textContent = 'Close';
-        lenis.stop();
-      } else {
-        mobileNav.classList.remove('is-open');
-        navToggleText.textContent = 'Menu';
-        lenis.start();
-      }
-    });
-  }
-
-  mobileNav.querySelectorAll('.mobile-nav-link').forEach((link) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      isNavOpen = false;
-      mobileNav.classList.remove('is-open');
-      navToggleText.textContent = 'Menu';
-      lenis.start();
-
-      const target = document.querySelector(link.getAttribute('href'));
-      if (target) {
-        setTimeout(() => {
-          lenis.scrollTo(target, { offset: -80 });
-        }, 300);
-      }
-    });
-  });
-
-       navToggle.addEventListener('click', () => {
-      isNavOpen = !isNavOpen;
       if (isNavOpen) {
         mobileNav.classList.add('is-open');
         navToggleText.textContent = 'Close';
@@ -880,16 +848,17 @@
         if (lenis) lenis.start();
       }
     });
+  }
 
-
-       link.addEventListener('click', (e) => {
+  mobileNav.querySelectorAll('.mobile-nav-link').forEach((navLink) => {
+    navLink.addEventListener('click', (e) => {
       e.preventDefault();
       isNavOpen = false;
       mobileNav.classList.remove('is-open');
       navToggleText.textContent = 'Menu';
       if (lenis) lenis.start();
 
-      const target = document.querySelector(link.getAttribute('href'));
+      const target = document.querySelector(navLink.getAttribute('href'));
       if (target) {
         setTimeout(() => {
           if (lenis) lenis.scrollTo(target, { offset: -80 });
@@ -897,6 +866,7 @@
         }, 300);
       }
     });
+  });
 
 
 
