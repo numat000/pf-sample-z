@@ -82,7 +82,7 @@
   }
 
 
-    /* ──────────────────────────────────────────
+   /* ──────────────────────────────────────────
      4. FV - Swiper Custom Slide Controller
      ────────────────────────────────────────── */
   class FVSlideController {
@@ -99,7 +99,6 @@
       this.totalSlides = 7;
       this.fastDuration = 0.6;
       this.pauseDuration = 2.0;
-      this.cycleLength = 7;
       this.currentStep = 0;
       this.isRunning = true;
       this.timeoutId = null;
@@ -114,17 +113,15 @@
     runStep() {
       if (!this.isRunning) return;
 
-      const isLastInCycle = this.currentStep === this.cycleLength - 1;
-      const holdDuration = isLastInCycle ? this.pauseDuration : this.fastDuration;
+      // currentStep 0〜5: 高速切替（1→2, 2→3, ... 6→7）
+      // currentStep 6: 7枚目で2秒停止後、1枚目へ戻る
+      const isShowSlide = this.currentStep === this.totalSlides - 1;
+      const holdDuration = isShowSlide ? this.pauseDuration : this.fastDuration;
 
       this.swiper.slideNext();
 
       this.timeoutId = setTimeout(() => {
-        if (isLastInCycle) {
-          this.currentStep = 0;
-        } else {
-          this.currentStep++;
-        }
+        this.currentStep = (this.currentStep + 1) % this.totalSlides;
         this.runStep();
       }, holdDuration * 1000);
     }
@@ -143,6 +140,7 @@
       }
     }
   }
+
   const fvSlideController = new FVSlideController();
 
   ScrollTrigger.create({
