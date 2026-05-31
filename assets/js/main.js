@@ -16,7 +16,9 @@
      ────────────────────────────────────────── */
   const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
-  /* 1. Lenis Smooth Scroll */
+  /* ──────────────────────────────────────────
+  1. Lenis Smooth Scroll 
+  ──────────────────────────────────────────*/
   let lenis;
   if (typeof Lenis !== 'undefined') {
     lenis = new Lenis({
@@ -34,6 +36,16 @@
     console.warn('Lenis not loaded. Smooth scroll disabled.');
   }
 
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) {
+        if (lenis) lenis.scrollTo(target, { offset: -80 });
+        else target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
 
 
   /* ──────────────────────────────────────────
@@ -376,10 +388,11 @@
      10. Concept - Text Character Animation
      ────────────────────────────────────────── */
   const conceptLead = document.querySelector('.concept-text--lead');
-  if (conceptLead) {
-    const splitLead = new SplitType(conceptLead, {
-      types: 'lines, words, chars',
-    });
+  if (conceptLead && typeof SplitType !== 'undefined') {
+    const splitLead = new SplitType(conceptLead, { types: 'lines, words, chars' });
+    // ... 以下同じ
+
+
 
     gsap.from(splitLead.chars, {
       opacity: 0,
@@ -867,6 +880,37 @@
     });
   });
 
+       navToggle.addEventListener('click', () => {
+      isNavOpen = !isNavOpen;
+      if (isNavOpen) {
+        mobileNav.classList.add('is-open');
+        navToggleText.textContent = 'Close';
+        if (lenis) lenis.stop();
+      } else {
+        mobileNav.classList.remove('is-open');
+        navToggleText.textContent = 'Menu';
+        if (lenis) lenis.start();
+      }
+    });
+
+
+       link.addEventListener('click', (e) => {
+      e.preventDefault();
+      isNavOpen = false;
+      mobileNav.classList.remove('is-open');
+      navToggleText.textContent = 'Menu';
+      if (lenis) lenis.start();
+
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        setTimeout(() => {
+          if (lenis) lenis.scrollTo(target, { offset: -80 });
+          else target.scrollIntoView({ behavior: 'smooth' });
+        }, 300);
+      }
+    });
+
+
 
   /* ──────────────────────────────────────────
      21. Page Load - Remove Loading State
@@ -876,5 +920,15 @@
     ScrollTrigger.refresh();
   });
 
+
+  /* ──────────────────────────────────────────
+    Lenisの読み込み安全装置
+     ────────────────────────────────────────── */
+     setTimeout(() => {
+    if (!document.body.classList.contains('is-loaded')) {
+      console.warn('Force applying is-loaded (safety net)');
+      document.body.classList.add('is-loaded');
+    }
+  }, 3000);
 
 })();
