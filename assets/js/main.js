@@ -143,6 +143,15 @@
       }
     }
   }
+  const fvSlideController = new FVSlideController();
+
+  ScrollTrigger.create({
+    trigger: '.section-fv',
+    start: 'top top',
+    end: 'bottom top',
+    onLeave: () => fvSlideController.pause(),
+    onEnterBack: () => fvSlideController.resume(),
+  });
 
 
   /* ──────────────────────────────────────────
@@ -199,18 +208,30 @@
   const glowVideo = document.querySelector('.glow-video-layer video');
 
   if (glowVideo) {
+    const loadAndPlayGlow = () => {
+      glowVideo.load();
+      glowVideo.play().catch(() => {
+        console.log('Glow video autoplay blocked');
+      });
+    };
+
+    // ScrollTriggerで遅延ロードを試みる
     ScrollTrigger.create({
       trigger: '.section-concept',
       start: 'top 120%',
       once: true,
-      onEnter: () => {
-        glowVideo.load();
-        glowVideo.play().catch(() => {
-          console.log('Glow video autoplay blocked');
-        });
-      },
+      onEnter: loadAndPlayGlow,
     });
+
+    // 安全装置: 5秒以内にScrollTriggerが発火しなければ強制ロード
+    setTimeout(() => {
+      if (glowVideo.readyState === 0) {
+        console.log('Glow video: force loading (safety net)');
+        loadAndPlayGlow();
+      }
+    }, 5000);
   }
+
 
   /* ──────────────────────────────────────────
      7.5. Glow Video - Fallback Detection
