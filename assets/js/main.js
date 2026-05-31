@@ -82,7 +82,7 @@
   }
 
 
-  /* ──────────────────────────────────────────
+    /* ──────────────────────────────────────────
      4. FV - Swiper Custom Slide Controller
      ────────────────────────────────────────── */
   class FVSlideController {
@@ -96,12 +96,11 @@
         autoplay: false,
       });
 
-      this.totalSlides = 6;
-      this.fastDuration = 0.5;
-      this.pauseDuration = 1.8;
-      this.cycleLength = 5;
+      this.totalSlides = 7;
+      this.fastDuration = 0.6;
+      this.pauseDuration = 2.0;
+      this.cycleLength = 7;
       this.currentStep = 0;
-      this.cycleCount = 0;
       this.isRunning = true;
       this.timeoutId = null;
 
@@ -123,7 +122,6 @@
       this.timeoutId = setTimeout(() => {
         if (isLastInCycle) {
           this.currentStep = 0;
-          this.cycleCount++;
         } else {
           this.currentStep++;
         }
@@ -145,16 +143,6 @@
       }
     }
   }
-
-  const fvSlideController = new FVSlideController();
-
-  ScrollTrigger.create({
-    trigger: '.section-fv',
-    start: 'top top',
-    end: 'bottom top',
-    onLeave: () => fvSlideController.pause(),
-    onEnterBack: () => fvSlideController.resume(),
-  });
 
 
   /* ──────────────────────────────────────────
