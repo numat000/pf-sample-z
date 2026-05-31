@@ -30,7 +30,7 @@
 
 <body>
   <!-- ============================================
-       SVG Filters (Hidden)
+       SVG Filters (Hidden / Referenced by CSS)
        ============================================ -->
   <svg class="svg-filters" aria-hidden="true">
     <defs>
@@ -52,6 +52,7 @@
         </feComponentTransfer>
         <feComposite in="halftoned" in2="SourceGraphic" operator="in" />
       </filter>
+
       <filter id="halftone-simple" color-interpolation-filters="sRGB">
         <feColorMatrix type="saturate" values="0" />
         <feComponentTransfer>
@@ -61,6 +62,33 @@
         </feComponentTransfer>
         <feComposite in2="SourceGraphic" operator="in" />
       </filter>
+
+      <filter id="white-outline" x="-5%" y="-5%" width="110%" height="110%">
+        <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="expanded" />
+        <feFlood flood-color="#ffffff" flood-opacity="0.9" result="white" />
+        <feComposite in="white" in2="expanded" operator="in" result="outline" />
+        <feMerge>
+          <feMergeNode in="outline" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+
+      <filter id="halftone-outlined" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feColorMatrix type="saturate" values="0" result="gray" />
+        <feComponentTransfer in="gray" result="contrast">
+          <feFuncR type="linear" slope="1.8" intercept="-0.2" />
+          <feFuncG type="linear" slope="1.8" intercept="-0.2" />
+          <feFuncB type="linear" slope="1.8" intercept="-0.2" />
+        </feComponentTransfer>
+        <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="expanded" />
+        <feFlood flood-color="#ffffff" flood-opacity="0.85" result="white" />
+        <feComposite in="white" in2="expanded" operator="in" result="outline" />
+        <feComposite in="contrast" in2="SourceGraphic" operator="in" result="halftoned" />
+        <feMerge>
+          <feMergeNode in="outline" />
+          <feMergeNode in="halftoned" />
+        </feMerge>
+      </filter>
     </defs>
   </svg>
 
@@ -68,74 +96,64 @@
        z-1: FV Background Layer (fixed)
        ============================================ -->
   <div class="fv-bg-layer" aria-hidden="true">
-    <img class="fv-bg-blur" src="assets/images/fv/fv_bg_main.webp" alt="" loading="eager" />
+    <img
+      class="fv-bg-blur"
+      src="assets/images/fv/fv_bg_main.webp"
+      alt=""
+      loading="eager"
+    />
     <div class="fv-bg-overlay"></div>
   </div>
 
   <!-- ============================================
-       z-2: Glow Gradient Video Layer (fixed)
+       z-2: Glow Video Layer (fixed)
        ============================================ -->
   <div class="glow-video-layer" aria-hidden="true">
-    <video class="glow-video" autoplay muted loop playsinline>
+    <video autoplay muted loop playsinline preload="none">
       <source src="assets/video/glow_gradient_loop.mp4" type="video/mp4" />
     </video>
   </div>
 
   <!-- ============================================
-       z-3: Ribbon Mask Layer (Inline SVG方式)
+       z-3: Ribbon Mask Layer (inline SVG方式)
        ============================================ -->
-  <div class="ribbon-mask-layer" aria-hidden="true">
-    <svg class="ribbon-svg" viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <clipPath id="ribbon-clip">
-          <!-- ジグザグ手書き風リボン形状 -->
-          <path d="
-            M0,300
-            C120,280 200,350 360,320
-            S520,250 680,290
-            S840,370 1000,310
-            S1160,240 1320,300
-            L1440,280
-            L1440,620
-            C1320,650 1160,580 1000,610
-            S840,680 680,630
-            S520,560 360,600
-            S200,670 0,640
-            Z
-          " />
-        </clipPath>
-      </defs>
-      <!-- 黒い全画面背景 → リボン部分だけ切り抜いて動画を見せる -->
-      <rect width="1440" height="900" fill="#0a0a0f" />
-      <rect width="1440" height="900" fill="transparent" clip-path="url(#ribbon-clip)" />
-    </svg>
-  </div>
+  <svg class="ribbon-mask-layer" aria-hidden="true"
+       viewBox="0 0 1920 1080"
+       preserveAspectRatio="none"
+       xmlns="http://www.w3.org/2000/svg">
+    <path
+      fill-rule="evenodd"
+      fill="#0a0a0f"
+      d="
+        M-200,-200 L2120,-200 L2120,1280 L-200,1280 Z
+
+        M-50,280
+        L180,310 L260,180 L480,340 L560,220
+        L740,380 L850,250 L980,400 L1080,290
+        L1200,430 L1340,300 L1480,460 L1580,340
+        L1720,480 L1820,370 L1970,500
+
+        L1970,620
+        L1820,540 L1720,660 L1580,510 L1480,640
+        L1340,480 L1200,610 L1080,460 L980,580
+        L850,430 L740,560 L560,400 L480,520
+        L260,370 L180,490 L-50,420
+        Z
+      "
+    />
+  </svg>
 
   <!-- ============================================
-       Morph Stage (fixed — FAQ→Contact 演出用)
-       ============================================ -->
-  <div class="morph-stage-wrapper" aria-hidden="true">
-    <div class="morph-stage">
-      <svg class="morph-svg" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
-        <path id="morph-path"
-          d="M100,30 C112,30 120,22 120,10 C120,-2 112,-10 100,-10 C88,-10 80,-2 80,10 C80,22 88,30 100,30 Z M100,30 L100,50 M70,80 L100,50 L130,80 M100,50 L100,160 M100,160 L70,240 M100,160 L130,240"
-          fill="rgba(20,8,40,0.8)" stroke="rgba(20,8,40,0.8)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-        <path id="morph-target-butterfly"
-          d="M100,180 C70,120 20,100 25,155 C28,190 55,215 75,235 C88,250 95,245 100,210 Z M100,180 C130,120 180,100 175,155 C172,190 145,215 125,235 C112,250 105,245 100,210 Z"
-          fill="rgba(100,50,160,0.7)" style="display:none;" />
-      </svg>
-      <div class="morph-blackout"></div>
-    </div>
-  </div>
-
-  <!-- ============================================
-       z-4: Content Layer
+       z-4: Content Layer (scrollable)
        ============================================ -->
   <main class="content-layer">
 
+    <!-- ========== HEADER / NAV ========== -->
     <header class="site-header">
       <div class="header-inner">
-        <a href="/" class="header-logo"><span class="logo-text">PORTFOLIO</span></a>
+        <a href="/" class="header-logo">
+          <span class="logo-text">PORTFOLIO</span>
+        </a>
         <nav class="header-nav">
           <ul class="nav-list">
             <li><a href="#works" class="nav-link">Works</a></li>
@@ -144,240 +162,470 @@
             <li><a href="#contact" class="nav-link">Contact</a></li>
           </ul>
         </nav>
-        <button class="nav-toggle" aria-label="メニュー"><span class="nav-toggle-dot"></span><span class="nav-toggle-text">Menu</span></button>
+        <button class="nav-toggle" aria-label="メニュー">
+          <span class="nav-toggle-dot"></span>
+          <span class="nav-toggle-text">Menu</span>
+        </button>
       </div>
     </header>
 
-    <!-- 01. FV -->
+    <!-- ========== 01. FV ========== -->
     <section id="fv" class="section-fv">
       <div class="fv-content">
         <div class="fv-slides-wrapper">
           <div class="swiper fv-slides">
             <div class="swiper-wrapper">
-              <div class="swiper-slide"><img src="assets/images/fv/fv_slide_01.webp" alt="作品1" /></div>
-              <div class="swiper-slide"><img src="assets/images/fv/fv_slide_02.webp" alt="作品2" /></div>
-              <div class="swiper-slide"><img src="assets/images/fv/fv_slide_03.webp" alt="作品3" /></div>
-              <div class="swiper-slide"><img src="assets/images/fv/fv_slide_04.webp" alt="作品4" /></div>
-              <div class="swiper-slide"><img src="assets/images/fv/fv_slide_05.webp" alt="作品5" /></div>
-              <div class="swiper-slide"><img src="assets/images/fv/fv_slide_06.webp" alt="作品6" /></div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_01.webp" alt="作品1" />
+              </div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_02.webp" alt="作品2" />
+              </div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_03.webp" alt="作品3" />
+              </div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_04.webp" alt="作品4" />
+              </div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_05.webp" alt="作品5" />
+              </div>
+              <div class="swiper-slide">
+                <img src="assets/images/fv/fv_slide_06.webp" alt="作品6" />
+              </div>
             </div>
           </div>
         </div>
+
         <div class="fv-text">
-          <h1 class="fv-title"><span class="fv-title-main">PORTFOLIO</span></h1>
+          <h1 class="fv-title">
+            <span class="fv-title-main">PORTFOLIO</span>
+          </h1>
           <p class="fv-subtitle">SNS DESIGN & DIRECTION</p>
         </div>
-        <div class="fv-scroll-indicator"><span class="scroll-line"></span><span class="scroll-label">SCROLL</span></div>
+
+        <div class="fv-scroll-indicator">
+          <span class="scroll-line"></span>
+          <span class="scroll-label">SCROLL</span>
+        </div>
       </div>
     </section>
 
-    <!-- 02. CONCEPT -->
+    <!-- ========== 02. CONCEPT ========== -->
     <section id="concept" class="section-concept parallax-section" data-depth="0.1">
-      <svg class="section-butterfly sb-concept" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g class="butterfly-body" transform="translate(60,50)">
-          <g class="wing-left" transform-origin="0 0"><path d="M0,-5 C-15,-40 -50,-45 -48,-15 C-46,5 -30,20 -20,35 C-12,46 -5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C-5,15 -15,38 -22,42 C-30,47 -35,35 -25,18 C-18,6 -5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <g class="wing-right" transform-origin="0 0"><path d="M0,-5 C15,-40 50,-45 48,-15 C46,5 30,20 20,35 C12,46 5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C5,15 15,38 22,42 C30,47 35,35 25,18 C18,6 5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <ellipse cx="0" cy="0" rx="2.5" ry="18" fill="rgba(30,10,50,0.8)" />
-          <line x1="-4" y1="-16" x2="-10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/>
-          <line x1="4" y1="-16" x2="10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/>
-          <circle cx="-10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/>
-          <circle cx="10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/>
-        </g>
-      </svg>
       <div class="section-inner">
-        <div class="section-label"><span class="section-number">[02]</span><span class="section-name">Concept</span></div>
+        <div class="section-label">
+          <span class="section-number">[02]</span>
+          <span class="section-name">Concept</span>
+        </div>
+
+        <div class="floating-parts">
+          <img class="floating-part parts-pen-hand" src="assets/images/parts/parts_pen_hand.png" alt="" loading="lazy" />
+          <img class="floating-part parts-notebook" src="assets/images/parts/parts_notebook.png" alt="" loading="lazy" />
+        </div>
+
         <div class="concept-text-wrapper">
-          <p class="concept-text concept-text--lead">SNSやWebのデザインを通じて、<br />誰かの人生をそっと動かしたい。</p>
+          <p class="concept-text concept-text--lead">
+            SNSやWebのデザインを通じて、<br />
+            誰かの人生をそっと動かしたい。
+          </p>
           <div class="concept-text concept-text--body">
-            <p>「蝶」。<br />変化や美しさの象徴であると同時に、<br />一羽の蝶のささやかな羽ばたきが、<br />巡り巡って地球の反対側で大きな変化を起こす──。</p>
-            <p>デザインも同じだと思っています。<br />画面の中の小さな一枚が、<br />誰かの心を動かし、行動を生み、<br />やがてその人の人生を変えていく。</p>
-            <p>ただ「綺麗なもの」ではなく、<br />「人の背中をそっと押せるもの」。</p>
-            <p>あなたのブランドの、その羽ばたきの一翼を、<br />私に担わせてください。</p>
+            <p>
+              「蝶」。<br />
+              変化や美しさの象徴であると同時に、<br />
+              一羽の蝶のささやかな羽ばたきが、<br />
+              巡り巡って地球の反対側で大きな変化を起こす──。
+            </p>
+            <p>
+              デザインも同じだと思っています。<br />
+              画面の中の小さな一枚が、<br />
+              誰かの心を動かし、行動を生み、<br />
+              やがてその人の人生を変えていく。
+            </p>
+            <p>
+              ただ「綺麗なもの」ではなく、<br />
+              「人の背中をそっと押せるもの」。
+            </p>
+            <p>
+              あなたのブランドの、その羽ばたきの一翼を、<br />
+              私に担わせてください。
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 03. SERVICE -->
+    <!-- ========== 03. SERVICE ========== -->
     <section id="service" class="section-service parallax-section" data-depth="0.15">
-      <svg class="section-butterfly sb-service" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g class="butterfly-body" transform="translate(60,50)">
-          <g class="wing-left" transform-origin="0 0"><path d="M0,-5 C-15,-40 -50,-45 -48,-15 C-46,5 -30,20 -20,35 C-12,46 -5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C-5,15 -15,38 -22,42 C-30,47 -35,35 -25,18 C-18,6 -5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <g class="wing-right" transform-origin="0 0"><path d="M0,-5 C15,-40 50,-45 48,-15 C46,5 30,20 20,35 C12,46 5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C5,15 15,38 22,42 C30,47 35,35 25,18 C18,6 5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <ellipse cx="0" cy="0" rx="2.5" ry="18" fill="rgba(30,10,50,0.8)" />
-          <line x1="-4" y1="-16" x2="-10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/><line x1="4" y1="-16" x2="10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/>
-          <circle cx="-10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/><circle cx="10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/>
-        </g>
-      </svg>
-      <!-- 飛行蝶もServiceセクション内に配置 -->
-      <svg class="flying-butterfly fb-service-works" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g class="butterfly-body" transform="translate(60,50)">
-          <g class="wing-left" transform-origin="0 0"><path d="M0,-5 C-15,-40 -50,-45 -48,-15 C-46,5 -30,20 -20,35 C-12,46 -5,40 0,5 Z" fill="rgba(120,60,180,0.6)" /><path d="M0,5 C-5,15 -15,38 -22,42 C-30,47 -35,35 -25,18 C-18,6 -5,8 0,5 Z" fill="rgba(100,50,160,0.5)" /></g>
-          <g class="wing-right" transform-origin="0 0"><path d="M0,-5 C15,-40 50,-45 48,-15 C46,5 30,20 20,35 C12,46 5,40 0,5 Z" fill="rgba(120,60,180,0.6)" /><path d="M0,5 C5,15 15,38 22,42 C30,47 35,35 25,18 C18,6 5,8 0,5 Z" fill="rgba(100,50,160,0.5)" /></g>
-          <ellipse cx="0" cy="0" rx="2.5" ry="18" fill="rgba(30,10,50,0.9)" />
-          <line x1="-4" y1="-16" x2="-10" y2="-28" stroke="rgba(30,10,50,0.7)" stroke-width="1" stroke-linecap="round"/><line x1="4" y1="-16" x2="10" y2="-28" stroke="rgba(30,10,50,0.7)" stroke-width="1" stroke-linecap="round"/>
-          <circle cx="-10" cy="-28" r="1.5" fill="rgba(30,10,50,0.7)"/><circle cx="10" cy="-28" r="1.5" fill="rgba(30,10,50,0.7)"/>
-        </g>
-      </svg>
       <div class="section-inner">
-        <div class="section-label"><span class="section-number">[03]</span><span class="section-name">Service</span></div>
+        <div class="section-label">
+          <span class="section-number">[03]</span>
+          <span class="section-name">Service</span>
+        </div>
+
+        <div class="floating-parts">
+          <img class="floating-part parts-pc-arm" src="assets/images/parts/parts_pc_arm.png" alt="" loading="lazy" />
+          <img class="floating-part parts-design-tool" src="assets/images/parts/parts_design_tool.png" alt="" loading="lazy" />
+        </div>
+
         <div class="service-grid">
-          <div class="service-card"><span class="service-card-number">01</span><h3 class="service-card-title">SNSデザイン</h3><p class="service-card-text">Instagramを中心とした投稿デザイン、ストーリーズ、リールカバーなど。ブランドの世界観をひと目で伝えるビジュアルを設計します。</p></div>
-          <div class="service-card"><span class="service-card-number">02</span><h3 class="service-card-title">SNS運用代行 / コンサルティング</h3><p class="service-card-text">主戦場はInstagram。デザイン制作だけでなく、戦略設計・投稿企画・分析改善まで一貫してサポートします。「作って終わり」ではなく、数字と向き合いながら成果に伴走します。</p></div>
-          <div class="service-card"><span class="service-card-number">03</span><h3 class="service-card-title">動画編集 / ショート動画制作</h3><p class="service-card-text">リール、TikTokなどのショート動画編集を得意としています。テンポ・色味・テロップで"見られる"動画に仕上げます。</p></div>
-          <div class="service-card"><span class="service-card-number">04</span><h3 class="service-card-title">ファッション関連デザイン</h3><p class="service-card-text">ファッション分野でのビジュアル制作にも強みがあります。ブランドのトーンに寄り添った、空気感のあるデザインをお届けします。</p></div>
+          <div class="service-card">
+            <span class="service-card-number">01</span>
+            <h3 class="service-card-title">SNSデザイン</h3>
+            <p class="service-card-text">
+              Instagramを中心とした投稿デザイン、ストーリーズ、リールカバーなど。ブランドの世界観をひと目で伝えるビジュアルを設計します。
+            </p>
+          </div>
+          <div class="service-card">
+            <span class="service-card-number">02</span>
+            <h3 class="service-card-title">SNS運用代行 / コンサルティング</h3>
+            <p class="service-card-text">
+              主戦場はInstagram。デザイン制作だけでなく、戦略設計・投稿企画・分析改善まで一貫してサポートします。「作って終わり」ではなく、数字と向き合いながら成果に伴走します。
+            </p>
+          </div>
+          <div class="service-card">
+            <span class="service-card-number">03</span>
+            <h3 class="service-card-title">動画編集 / ショート動画制作</h3>
+            <p class="service-card-text">
+              リール、TikTokなどのショート動画編集を得意としています。テンポ・色味・テロップで"見られる"動画に仕上げます。
+            </p>
+          </div>
+          <div class="service-card">
+            <span class="service-card-number">04</span>
+            <h3 class="service-card-title">ファッション関連デザイン</h3>
+            <p class="service-card-text">
+              ファッション分野でのビジュアル制作にも強みがあります。ブランドのトーンに寄り添った、空気感のあるデザインをお届けします。
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 04. WORKS -->
+    <!-- ========== 04. WORKS ========== -->
     <section id="works" class="section-works">
-      <svg class="section-butterfly sb-works" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g class="butterfly-body" transform="translate(60,50)">
-          <g class="wing-left" transform-origin="0 0"><path d="M0,-5 C-15,-40 -50,-45 -48,-15 C-46,5 -30,20 -20,35 C-12,46 -5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C-5,15 -15,38 -22,42 C-30,47 -35,35 -25,18 C-18,6 -5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <g class="wing-right" transform-origin="0 0"><path d="M0,-5 C15,-40 50,-45 48,-15 C46,5 30,20 20,35 C12,46 5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C5,15 15,38 22,42 C30,47 35,35 25,18 C18,6 5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <ellipse cx="0" cy="0" rx="2.5" ry="18" fill="rgba(30,10,50,0.8)" />
-          <line x1="-4" y1="-16" x2="-10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/><line x1="4" y1="-16" x2="10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/>
-          <circle cx="-10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/><circle cx="10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/>
-        </g>
-      </svg>
       <div class="section-inner section-inner--wide">
-        <div class="section-label"><span class="section-number">[04]</span><span class="section-name">Works</span></div>
+        <div class="section-label">
+          <span class="section-number">[04]</span>
+          <span class="section-name">Works</span>
+        </div>
+
         <div class="works-horizontal-scroll">
           <div class="works-track">
-            <article class="works-card"><div class="works-card-media"><img class="works-card-image" src="assets/images/works/works_thumb_01.webp" alt="Work 01" loading="lazy" /></div><div class="works-card-info"><span class="works-card-category">Category</span><h3 class="works-card-title">Work 01</h3><p class="works-card-desc">企画・デザイン・運用</p></div></article>
-            <article class="works-card"><div class="works-card-media"><img class="works-card-image" src="assets/images/works/works_thumb_02.webp" alt="Work 02" loading="lazy" /></div><div class="works-card-info"><span class="works-card-category">Category</span><h3 class="works-card-title">Work 02</h3><p class="works-card-desc">企画・デザイン・運用</p></div></article>
-            <article class="works-card"><div class="works-card-media"><img class="works-card-image" src="assets/images/works/works_thumb_03.webp" alt="Work 03" loading="lazy" /></div><div class="works-card-info"><span class="works-card-category">Category</span><h3 class="works-card-title">Work 03</h3><p class="works-card-desc">企画・デザイン・運用</p></div></article>
-            <article class="works-card"><div class="works-card-media"><img class="works-card-image" src="assets/images/works/works_thumb_04.webp" alt="Work 04" loading="lazy" /></div><div class="works-card-info"><span class="works-card-category">Category</span><h3 class="works-card-title">Work 04</h3><p class="works-card-desc">企画・デザイン・運用</p></div></article>
-            <article class="works-card"><div class="works-card-media"><img class="works-card-image" src="assets/images/works/works_thumb_05.webp" alt="Work 05" loading="lazy" /></div><div class="works-card-info"><span class="works-card-category">Category</span><h3 class="works-card-title">Work 05</h3><p class="works-card-desc">企画・デザイン・運用</p></div></article>
-            <article class="works-card"><div class="works-card-media"><img class="works-card-image" src="assets/images/works/works_thumb_06.webp" alt="Work 06" loading="lazy" /></div><div class="works-card-info"><span class="works-card-category">Category</span><h3 class="works-card-title">Work 06</h3><p class="works-card-desc">企画・デザイン・運用</p></div></article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_01.webp" alt="Work 01" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 01</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_02.webp" alt="Work 02" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 02</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_03.webp" alt="Work 03" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 03</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_04.webp" alt="Work 04" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 04</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_05.webp" alt="Work 05" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 05</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
+            <article class="works-card">
+              <div class="works-card-media">
+                <img class="works-card-image" src="assets/images/works/works_thumb_06.webp" alt="Work 06" loading="lazy" />
+              </div>
+              <div class="works-card-info">
+                <span class="works-card-category">Category</span>
+                <h3 class="works-card-title">Work 06</h3>
+                <p class="works-card-desc">企画・デザイン・運用</p>
+              </div>
+            </article>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 05. VOICE -->
-    <section id="voice" class="section-voice">
-      <svg class="section-butterfly sb-voice" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g class="butterfly-body" transform="translate(60,50)">
-          <g class="wing-left" transform-origin="0 0"><path d="M0,-5 C-15,-40 -50,-45 -48,-15 C-46,5 -30,20 -20,35 C-12,46 -5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C-5,15 -15,38 -22,42 C-30,47 -35,35 -25,18 C-18,6 -5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <g class="wing-right" transform-origin="0 0"><path d="M0,-5 C15,-40 50,-45 48,-15 C46,5 30,20 20,35 C12,46 5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C5,15 15,38 22,42 C30,47 35,35 25,18 C18,6 5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <ellipse cx="0" cy="0" rx="2.5" ry="18" fill="rgba(30,10,50,0.8)" />
-          <line x1="-4" y1="-16" x2="-10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/><line x1="4" y1="-16" x2="10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/>
-          <circle cx="-10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/><circle cx="10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/>
-        </g>
-      </svg>
+    <!-- ========== 05. VOICE ========== -->
+    <section id="voice" class="section-voice parallax-section" data-depth="0.08">
       <div class="section-inner">
-        <div class="section-label"><span class="section-number">[05]</span><span class="section-name">Voice</span></div>
+        <div class="section-label">
+          <span class="section-number">[05]</span>
+          <span class="section-name">Voice</span>
+        </div>
+
+        <div class="floating-parts">
+          <img class="floating-part parts-smartphone" src="assets/images/parts/parts_smartphone.png" alt="" loading="lazy" />
+          <img class="floating-part parts-chat-bubble" src="assets/images/parts/parts_chat_bubble.png" alt="" loading="lazy" />
+        </div>
+
         <div class="swiper voice-slider">
           <div class="swiper-wrapper">
-            <div class="swiper-slide"><div class="voice-item"><span class="voice-number">01</span><p class="voice-text">投稿デザインを一新してもらってから、明らかにアカウントの空気感が変わりました。「世界観が好き」と言ってフォローしてくれる方が増えて、売上にも繋がっています。お願いして本当によかったです。</p></div></div>
-            <div class="swiper-slide"><div class="voice-item"><span class="voice-number">02</span><p class="voice-text">ただ綺麗なだけじゃなくて、「なぜこのデザインなのか」をきちんと説明してくれるのが信頼できました。リールの再生数が10倍以上になり、新規のお客様が目に見えて増えています。</p></div></div>
-            <div class="swiper-slide"><div class="voice-item"><span class="voice-number">03</span><p class="voice-text">運用代行をお願いしてから、投稿のことで悩む時間がゼロになりました。毎月の改善提案も的確で、本業に集中できる環境を作ってもらえたのが何より嬉しいです。</p></div></div>
-            <div class="swiper-slide"><div class="voice-item"><span class="voice-number">04</span><p class="voice-text">自分の作品の魅力を、自分以上に言葉と画で表現してくれる方です。「私のブランドって、こんなに素敵だったんだ」と思わせてくれました。ファンが増えたのはもちろん、自信もくれた存在です。</p></div></div>
-            <div class="swiper-slide"><div class="voice-item"><span class="voice-number">05</span><p class="voice-text">ショート動画の編集をお願いしていますが、テンポも色味も完璧で、毎回仕上がりが楽しみです。お客様からも「動画見て予約しました」という声が増えました。プロにお願いして正解でした。</p></div></div>
+            <div class="swiper-slide">
+              <blockquote class="voice-item">
+                <span class="voice-number">01</span>
+                <p class="voice-text">
+                  投稿デザインを一新してもらってから、明らかにアカウントの空気感が変わりました。「世界観が好き」と言ってフォローしてくれる方が増えて、売上にも繋がっています。お願いして本当によかったです。
+                </p>
+                <footer class="voice-author">
+                  <span>— アパレルブランドマネージャー / 30代女性</span>
+                </footer>
+              </blockquote>
+            </div>
+            <div class="swiper-slide">
+              <blockquote class="voice-item">
+                <span class="voice-number">02</span>
+                <p class="voice-text">
+                  ただ綺麗なだけじゃなくて、「なぜこのデザインなのか」をきちんと説明してくれるのが信頼できました。リールの再生数が10倍以上になり、新規のお客様が目に見えて増えています。
+                </p>
+                <footer class="voice-author">
+                  <span>— 飲食店オーナー / 40代男性</span>
+                </footer>
+              </blockquote>
+            </div>
+            <div class="swiper-slide">
+              <blockquote class="voice-item">
+                <span class="voice-number">03</span>
+                <p class="voice-text">
+                  運用代行をお願いしてから、投稿のことで悩む時間がゼロになりました。毎月の改善提案も的確で、本業に集中できる環境を作ってもらえたのが何より嬉しいです。
+                </p>
+                <footer class="voice-author">
+                  <span>— パーソナルジム経営 / 30代男性</span>
+                </footer>
+              </blockquote>
+            </div>
+            <div class="swiper-slide">
+              <blockquote class="voice-item">
+                <span class="voice-number">04</span>
+                <p class="voice-text">
+                  自分の作品の魅力を、自分以上に言葉と画で表現してくれる方です。「私のブランドって、こんなに素敵だったんだ」と思わせてくれました。ファンが増えたのはもちろん、自信もくれた存在です。
+                </p>
+                <footer class="voice-author">
+                  <span>— ハンドメイド作家 / 20代女性</span>
+                </footer>
+              </blockquote>
+            </div>
+            <div class="swiper-slide">
+              <blockquote class="voice-item">
+                <span class="voice-number">05</span>
+                <p class="voice-text">
+                  ショート動画の編集をお願いしていますが、テンポも色味も完璧で、毎回仕上がりが楽しみです。お客様からも「動画見て予約しました」という声が増えました。プロにお願いして正解でした。
+                </p>
+                <footer class="voice-author">
+                  <span>— 美容サロン経営 / 30代女性</span>
+                </footer>
+              </blockquote>
+            </div>
           </div>
           <div class="voice-pagination"></div>
         </div>
       </div>
     </section>
 
-    <!-- 06. FLOW -->
-    <section id="flow" class="section-flow">
-      <svg class="section-butterfly sb-flow" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g class="butterfly-body" transform="translate(60,50)">
-          <g class="wing-left" transform-origin="0 0"><path d="M0,-5 C-15,-40 -50,-45 -48,-15 C-46,5 -30,20 -20,35 C-12,46 -5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C-5,15 -15,38 -22,42 C-30,47 -35,35 -25,18 C-18,6 -5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <g class="wing-right" transform-origin="0 0"><path d="M0,-5 C15,-40 50,-45 48,-15 C46,5 30,20 20,35 C12,46 5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C5,15 15,38 22,42 C30,47 35,35 25,18 C18,6 5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <ellipse cx="0" cy="0" rx="2.5" ry="18" fill="rgba(30,10,50,0.8)" />
-          <line x1="-4" y1="-16" x2="-10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/><line x1="4" y1="-16" x2="10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/>
-          <circle cx="-10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/><circle cx="10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/>
-        </g>
-      </svg>
+    <!-- ========== 06. FLOW ========== -->
+    <section id="flow" class="section-flow parallax-section" data-depth="0.08">
       <div class="section-inner">
-        <div class="section-label"><span class="section-number">[06]</span><span class="section-name">Flow</span></div>
+        <div class="section-label">
+          <span class="section-number">[06]</span>
+          <span class="section-name">Flow</span>
+        </div>
+
+        <div class="floating-parts">
+          <img class="floating-part parts-handshake" src="assets/images/parts/parts_handshake.png" alt="" loading="lazy" />
+        </div>
+
         <div class="flow-timeline">
-          <div class="flow-step"><span class="flow-step-number">01</span><h3 class="flow-step-title">お問い合わせ</h3><p class="flow-step-text">フォームよりお気軽にご連絡ください。ご相談・お見積もりは無料です。</p></div>
-          <div class="flow-step"><span class="flow-step-number">02</span><h3 class="flow-step-title">ヒアリング</h3><p class="flow-step-text">オンラインにて、目的・ターゲット・ブランドイメージを丁寧にお伺いします。全国どこからでもご依頼いただけます。</p></div>
-          <div class="flow-step"><span class="flow-step-number">03</span><h3 class="flow-step-title">ご提案・お見積もり</h3><p class="flow-step-text">ヒアリング内容をもとに、最適なプランとお見積もりをご提示します。</p></div>
-          <div class="flow-step"><span class="flow-step-number">04</span><h3 class="flow-step-title">ご契約・制作開始</h3><p class="flow-step-text">内容にご納得いただけましたら契約。デザイン・運用に着手します。進捗は随時共有します。</p></div>
-          <div class="flow-step"><span class="flow-step-number">05</span><h3 class="flow-step-title">納品・公開</h3><p class="flow-step-text">ご確認・修正対応を経て、納品または投稿開始。</p></div>
-          <div class="flow-step"><span class="flow-step-number">06</span><h3 class="flow-step-title">継続サポート</h3><p class="flow-step-text">SNS運用の場合は、毎月の分析と改善提案を継続的に行います。一羽の蝶を、長く美しく舞わせるために。</p></div>
+          <div class="flow-step">
+            <span class="flow-step-number">01</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">お問い合わせ</h3>
+              <p class="flow-step-text">フォームよりお気軽にご連絡ください。ご相談・お見積もりは無料です。</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-number">02</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">ヒアリング</h3>
+              <p class="flow-step-text">オンラインにて、目的・ターゲット・ブランドイメージを丁寧にお伺いします。全国どこからでもご依頼いただけます。</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-number">03</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">ご提案・お見積もり</h3>
+              <p class="flow-step-text">ヒアリング内容をもとに、最適なプランとお見積もりをご提示します。</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-number">04</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">ご契約・制作開始</h3>
+              <p class="flow-step-text">内容にご納得いただけましたら契約。デザイン・運用に着手します。進捗は随時共有します。</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-number">05</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">納品・公開</h3>
+              <p class="flow-step-text">ご確認・修正対応を経て、納品または投稿開始。</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <span class="flow-step-number">06</span>
+            <div class="flow-step-content">
+              <h3 class="flow-step-title">継続サポート</h3>
+              <p class="flow-step-text">SNS運用の場合は、毎月の分析と改善提案を継続的に行います。一羽の蝶を、長く美しく舞わせるために。</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 07. FAQ -->
+    <!-- ========== 07. FAQ ========== -->
     <section id="faq" class="section-faq">
-      <svg class="section-butterfly sb-faq" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g class="butterfly-body" transform="translate(60,50)">
-          <g class="wing-left" transform-origin="0 0"><path d="M0,-5 C-15,-40 -50,-45 -48,-15 C-46,5 -30,20 -20,35 C-12,46 -5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C-5,15 -15,38 -22,42 C-30,47 -35,35 -25,18 C-18,6 -5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <g class="wing-right" transform-origin="0 0"><path d="M0,-5 C15,-40 50,-45 48,-15 C46,5 30,20 20,35 C12,46 5,40 0,5 Z" fill="rgba(100,50,160,0.5)" /><path d="M0,5 C5,15 15,38 22,42 C30,47 35,35 25,18 C18,6 5,8 0,5 Z" fill="rgba(80,40,140,0.4)" /></g>
-          <ellipse cx="0" cy="0" rx="2.5" ry="18" fill="rgba(30,10,50,0.8)" />
-          <line x1="-4" y1="-16" x2="-10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/><line x1="4" y1="-16" x2="10" y2="-28" stroke="rgba(30,10,50,0.6)" stroke-width="1" stroke-linecap="round"/>
-          <circle cx="-10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/><circle cx="10" cy="-28" r="1.5" fill="rgba(30,10,50,0.6)"/>
-        </g>
-      </svg>
       <div class="section-inner">
-        <div class="section-label"><span class="section-number">[07]</span><span class="section-name">FAQ</span></div>
+        <div class="section-label">
+          <span class="section-number">[07]</span>
+          <span class="section-name">FAQ</span>
+        </div>
+
         <div class="faq-list">
-          <div class="faq-item"><button class="faq-question"><span>契約期間や最低発注数はありますか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>SNS運用代行は最低3ヶ月〜、デザイン単発のご依頼は1案件〜お受けしています。</p></div></div>
-          <div class="faq-item"><button class="faq-question"><span>料金はどのくらいですか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>プロジェクトの規模や内容により異なります。ヒアリング後に個別にお見積もりをお出しします。</p></div></div>
-          <div class="faq-item"><button class="faq-question"><span>地方からでも依頼できますか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>はい、オンラインでの打ち合わせを基本としていますので、全国どこからでもご依頼いただけます。</p></div></div>
-          <div class="faq-item"><button class="faq-question"><span>デザインだけ、運用だけの依頼も可能ですか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>もちろん可能です。SNSデザインのみ、運用代行のみ、動画編集のみなど、ご希望に合わせて柔軟にお受けします。</p></div></div>
-          <div class="faq-item"><button class="faq-question"><span>途中でプラン変更は可能ですか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>はい、アカウントの状況やご要望に応じて、柔軟にプラン内容を見直すことができます。</p></div></div>
-          <div class="faq-item"><button class="faq-question"><span>特定の業種にしか対応していませんか？</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>はい、業種は問わずお受けしています。ヒアリングを通じてブランドの世界観を理解し、最適なデザインをご提案します。</p></div></div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>契約期間はどのくらいですか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>SNS運用代行は最低3ヶ月〜、デザイン単発のご依頼は1案件〜お受けしています。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>料金はどのくらいですか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>プロジェクトの規模や内容により異なります。ヒアリング後に個別にお見積もりをお出しします。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>遠方でも依頼できますか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>はい、オンラインでの打ち合わせを基本としていますので、全国どこからでもご依頼いただけます。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>デザインだけ、運用だけのご依頼も可能ですか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>もちろん可能です。SNSデザインのみ、運用代行のみ、動画編集のみなど、ご希望に合わせて柔軟にお受けします。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>途中でプラン変更はできますか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>はい、アカウントの状況やご要望に応じて、柔軟にプラン内容を見直すことができます。</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>ファッション以外の業種でも依頼できますか？</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>はい、業種は問わずお受けしています。ヒアリングを通じてブランドの世界観を理解し、最適なデザインをご提案します。</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 08. CONTACT -->
-    <section id="contact" class="section-contact">
+    <!-- ========== 08. CONTACT ========== -->
+    <section id="contact" class="section-contact parallax-section" data-depth="0.05">
       <div class="section-inner">
-        <div class="section-label"><span class="section-number">[08]</span><span class="section-name">Contact</span></div>
+        <div class="section-label">
+          <span class="section-number">[08]</span>
+          <span class="section-name">Contact</span>
+        </div>
+
+        <div class="floating-parts">
+          <img class="floating-part parts-keyboard" src="assets/images/parts/parts_keyboard.png" alt="" loading="lazy" />
+        </div>
+
         <div class="contact-content">
-          <p class="contact-text">ご相談・お見積もり・ちょっとした質問でも、お気軽にどうぞ。<br />あなたの「伝えたい」を、一緒に形にしていきましょう。</p>
-          <a href="#" class="contact-btn">CONTACT<span class="contact-btn-arrow">→</span></a>
+          <p class="contact-text">
+            ご相談・お見積もり・ちょっとした質問でも、お気軽にどうぞ。<br />
+            あなたの「伝えたい」を、一緒に形にしていきましょう。
+          </p>
+          <a href="#" class="contact-btn">
+            <span class="contact-btn-text">CONTACT</span>
+            <span class="contact-btn-arrow">→</span>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ========== FOOTER ========== -->
     <footer class="site-footer">
       <div class="footer-inner">
-        <a href="/" class="footer-logo"><span class="logo-text">PORTFOLIO</span></a>
-        <div class="footer-sns">
-          <a href="#" class="footer-sns-link">Instagram</a>
-          <a href="#" class="footer-sns-link">X</a>
+        <div class="footer-logo">
+          <span class="logo-text">PORTFOLIO</span>
         </div>
-        <p class="footer-copyright">&copy; 2025 PORTFOLIO. All Rights Reserved.</p>
+        <div class="footer-sns">
+          <a href="#" class="footer-sns-link" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="#" class="footer-sns-link" target="_blank" rel="noopener noreferrer">X</a>
+          <a href="#" class="footer-sns-link" target="_blank" rel="noopener noreferrer">LINE</a>
+        </div>
+        <p class="footer-copyright">&copy; 2026 PORTFOLIO. All Rights Reserved.</p>
       </div>
     </footer>
 
   </main>
 
-  <!-- Mobile Nav Overlay -->
-  <div class="mobile-nav-overlay" aria-hidden="true">
-    <nav class="mobile-nav">
-      <ul class="mobile-nav-list">
-        <li><a href="#concept" class="mobile-nav-link">Concept</a></li>
-        <li><a href="#service" class="mobile-nav-link">Service</a></li>
-        <li><a href="#works" class="mobile-nav-link">Works</a></li>
-        <li><a href="#voice" class="mobile-nav-link">Voice</a></li>
-        <li><a href="#flow" class="mobile-nav-link">Flow</a></li>
-        <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
-        <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
-
   <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/MotionPathPlugin.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13/dist/MorphSVGPlugin.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/split-type"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>
