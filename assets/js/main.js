@@ -1,6 +1,6 @@
 /* ============================================
    main.js
-   Portfolio Site - Animation Controller
+   Design School Site - Animation Controller
    ============================================ */
 
 (function () {
@@ -17,8 +17,8 @@
   const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
   /* ──────────────────────────────────────────
-  1. Lenis Smooth Scroll 
-  ──────────────────────────────────────────*/
+     1. Lenis Smooth Scroll
+     ────────────────────────────────────────── */
   let lenis;
   if (typeof Lenis !== 'undefined') {
     lenis = new Lenis({
@@ -82,7 +82,7 @@
   }
 
 
-   /* ──────────────────────────────────────────
+  /* ──────────────────────────────────────────
      4. FV - Swiper Custom Slide Controller
      ────────────────────────────────────────── */
   class FVSlideController {
@@ -113,8 +113,6 @@
     runStep() {
       if (!this.isRunning) return;
 
-      // currentStep 0〜5: 高速切替（1→2, 2→3, ... 6→7）
-      // currentStep 6: 7枚目で2秒停止後、1枚目へ戻る
       const isShowSlide = this.currentStep === this.totalSlides - 1;
       const holdDuration = isShowSlide ? this.pauseDuration : this.fastDuration;
 
@@ -158,10 +156,11 @@
   const fvTimeline = gsap.timeline({ delay: 0.3 });
 
   fvTimeline
-    .from('.fv-title-main', {
+    .from('.fv-title-line', {
       opacity: 0,
-      y: 50,
-      duration: 1.4,
+      y: 40,
+      duration: 1.0,
+      stagger: 0.2,
       ease: 'power3.out',
     })
     .from(
@@ -172,7 +171,7 @@
         duration: 1.0,
         ease: 'power3.out',
       },
-      '-=0.8'
+      '-=0.5'
     )
     .from(
       '.fv-scroll-indicator',
@@ -213,7 +212,6 @@
       });
     };
 
-    // ScrollTriggerで遅延ロードを試みる
     ScrollTrigger.create({
       trigger: '.section-concept',
       start: 'top 120%',
@@ -221,7 +219,6 @@
       onEnter: loadAndPlayGlow,
     });
 
-    // 安全装置: 5秒以内にScrollTriggerが発火しなければ強制ロード
     setTimeout(() => {
       if (glowVideo.readyState === 0) {
         console.log('Glow video: force loading (safety net)');
@@ -229,7 +226,6 @@
       }
     }, 5000);
   }
-
 
   /* ──────────────────────────────────────────
      7.5. Glow Video - Fallback Detection
@@ -264,65 +260,49 @@
     if (ribbonMaskLayer) ribbonMaskLayer.style.opacity = opacity;
   }
 
-  // Concept: 0 → 1
   ScrollTrigger.create({
     trigger: '.section-concept',
     start: 'top 80%',
     end: 'top 20%',
     scrub: 1,
-    onUpdate: (self) => {
-      setGlowOpacity(self.progress);
-    },
+    onUpdate: (self) => { setGlowOpacity(self.progress); },
   });
 
-  // Works: 1 → 0
   ScrollTrigger.create({
-    trigger: '.section-works',
+    trigger: '.section-gallery',
     start: 'top 80%',
     end: 'top 30%',
     scrub: 1,
-    onUpdate: (self) => {
-      setGlowOpacity(1 - self.progress);
-    },
+    onUpdate: (self) => { setGlowOpacity(1 - self.progress); },
   });
 
-  // Voice: 0 → 1
   ScrollTrigger.create({
-    trigger: '.section-voice',
+    trigger: '.section-story',
     start: 'top 80%',
     end: 'top 30%',
     scrub: 1,
-    onUpdate: (self) => {
-      setGlowOpacity(self.progress);
-    },
+    onUpdate: (self) => { setGlowOpacity(self.progress); },
   });
 
-  // FAQ: 1 → 0
   ScrollTrigger.create({
     trigger: '.section-faq',
     start: 'top 80%',
     end: 'top 50%',
     scrub: 1,
-    onUpdate: (self) => {
-      setGlowOpacity(1 - self.progress);
-    },
+    onUpdate: (self) => { setGlowOpacity(1 - self.progress); },
   });
 
-  // Contact: 0 → 0.5
   ScrollTrigger.create({
     trigger: '.section-contact',
     start: 'top 80%',
     end: 'top 40%',
     scrub: 1,
-    onUpdate: (self) => {
-      setGlowOpacity(self.progress * 0.5);
-    },
+    onUpdate: (self) => { setGlowOpacity(self.progress * 0.5); },
   });
 
 
   /* ──────────────────────────────────────────
      8.5. Glow Ribbon - Scroll Position Shift
-     (inline SVG方式: path要素をGSAPで直接移動)
      ────────────────────────────────────────── */
   const ribbonMask = document.querySelector('.ribbon-mask-layer');
   const ribbonPath = document.querySelector('.ribbon-mask-layer path');
@@ -397,9 +377,6 @@
   const conceptLead = document.querySelector('.concept-text--lead');
   if (conceptLead && typeof SplitType !== 'undefined') {
     const splitLead = new SplitType(conceptLead, { types: 'lines, words, chars' });
-    // ... 以下同じ
-
-
 
     gsap.from(splitLead.chars, {
       opacity: 0,
@@ -431,7 +408,7 @@
 
 
   /* ──────────────────────────────────────────
-     11. Service - Card Stagger Animation
+     11. For You - Card Stagger Animation
      ────────────────────────────────────────── */
   gsap.from('.service-card', {
     opacity: 0,
@@ -447,10 +424,49 @@
 
 
   /* ──────────────────────────────────────────
-     12. Works - Horizontal Scroll (pinning)
+     11.5. Curriculum - Step Animation
+     ────────────────────────────────────────── */
+  gsap.from('.curriculum-step', {
+    opacity: 0,
+    y: 50,
+    duration: 0.8,
+    stagger: 0.25,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.curriculum-steps',
+      start: 'top 70%',
+    },
+  });
+
+  gsap.from('.curriculum-advanced', {
+    opacity: 0,
+    y: 30,
+    duration: 0.7,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.curriculum-advanced',
+      start: 'top 80%',
+    },
+  });
+
+  gsap.from('.curriculum-style-item', {
+    opacity: 0,
+    y: 30,
+    duration: 0.6,
+    stagger: 0.15,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.curriculum-style',
+      start: 'top 80%',
+    },
+  });
+
+
+  /* ──────────────────────────────────────────
+     12. Gallery - Horizontal Scroll (pinning)
      ────────────────────────────────────────── */
   const worksTrack = document.querySelector('.works-track');
-  const worksSection = document.querySelector('.section-works');
+  const worksSection = document.querySelector('.section-gallery');
 
   if (worksTrack && worksSection) {
     const getScrollDistance = () => {
@@ -474,31 +490,63 @@
 
 
   /* ──────────────────────────────────────────
-     13. Voice - Swiper Init
+     13. Our Story - Text Animation
      ────────────────────────────────────────── */
-  const voiceSwiper = new Swiper('.voice-slider', {
-    effect: 'fade',
-    fadeEffect: { crossFade: true },
-    speed: 800,
-    autoplay: {
-      delay: 6000,
-      disableOnInteraction: true,
-    },
-    loop: true,
-    pagination: {
-      el: '.voice-pagination',
-      clickable: true,
-    },
+  const storyLead = document.querySelector('.story-text--lead');
+  if (storyLead) {
+    gsap.from(storyLead, {
+      opacity: 0,
+      y: 30,
+      duration: 1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: storyLead,
+        start: 'top 75%',
+      },
+    });
+  }
+
+  gsap.utils.toArray('.story-text--body p').forEach((p) => {
+    gsap.from(p, {
+      opacity: 0,
+      y: 30,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: p,
+        start: 'top 80%',
+      },
+    });
   });
 
-  gsap.from('.voice-slider', {
+
+  /* ──────────────────────────────────────────
+     13.5. Instructor - Entrance
+     ────────────────────────────────────────── */
+  gsap.from('.instructor-content', {
     opacity: 0,
     y: 50,
     duration: 1,
     ease: 'power3.out',
     scrollTrigger: {
-      trigger: '.section-voice',
-      start: 'top 65%',
+      trigger: '.instructor-content',
+      start: 'top 70%',
+    },
+  });
+
+
+  /* ──────────────────────────────────────────
+     13.6. Support - Card Stagger
+     ────────────────────────────────────────── */
+  gsap.from('.support-card', {
+    opacity: 0,
+    y: 50,
+    duration: 0.8,
+    stagger: 0.2,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.support-grid',
+      start: 'top 70%',
     },
   });
 
@@ -782,7 +830,6 @@
      19. Mobile Optimizations
      ────────────────────────────────────────── */
   if (isMobile) {
-    // 発光動画: モバイルでは静止グラデーションに切替
     if (glowVideo) {
       glowVideo.pause();
       glowVideo.removeAttribute('autoplay');
@@ -796,7 +843,6 @@
       }
     }
 
-    // Works: モバイルでは横スクロール pinning を無効化
     ScrollTrigger.getAll().forEach((st) => {
       if (st.pin === worksSection) {
         st.kill();
@@ -821,11 +867,8 @@
   if (isMobile) {
     const ribbonMaskMobile = document.querySelector('.ribbon-mask-layer');
     if (ribbonMaskMobile) {
-      // モバイルではインラインSVGのパスを非表示にし、
-      // 単純な半透明オーバーレイとして機能させる
       const pathEl = ribbonMaskMobile.querySelector('path');
       if (pathEl) {
-        // 穴なしの全面塗りに変更
         pathEl.setAttribute('d', 'M-200,-200 L2120,-200 L2120,1280 L-200,1280 Z');
         pathEl.setAttribute('fill-rule', 'nonzero');
       }
@@ -845,9 +888,9 @@
   mobileNav.innerHTML = `
     <nav class="mobile-nav-content">
       <ul class="mobile-nav-list">
-        <li><a href="#works" class="mobile-nav-link">Works</a></li>
-        <li><a href="#service" class="mobile-nav-link">Service</a></li>
-        <li><a href="#voice" class="mobile-nav-link">Voice</a></li>
+        <li><a href="#curriculum" class="mobile-nav-link">Curriculum</a></li>
+        <li><a href="#gallery" class="mobile-nav-link">Gallery</a></li>
+        <li><a href="#story" class="mobile-nav-link">Our Story</a></li>
         <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
       </ul>
     </nav>
@@ -888,7 +931,6 @@
   });
 
 
-
   /* ──────────────────────────────────────────
      21. Page Load - Remove Loading State
      ────────────────────────────────────────── */
@@ -899,13 +941,14 @@
 
 
   /* ──────────────────────────────────────────
-    Lenisの読み込み安全装置
+     22. Safety Net - Force is-loaded after timeout
      ────────────────────────────────────────── */
-     setTimeout(() => {
+  setTimeout(() => {
     if (!document.body.classList.contains('is-loaded')) {
       console.warn('Force applying is-loaded (safety net)');
       document.body.classList.add('is-loaded');
     }
   }, 3000);
+
 
 })();
