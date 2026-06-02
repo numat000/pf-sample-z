@@ -453,7 +453,53 @@ button {
   z-index: 2;
   text-align: center;
   pointer-events: none;
+  padding: 40px 60px;
 }
+
+.fv-text::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: -80px;
+  right: -80px;
+  bottom: -40px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(10, 10, 15, 0.6) 0%,
+    rgba(10, 10, 15, 0.3) 50%,
+    transparent 75%
+  );
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.fv-title-line {
+  display: block;
+  font-family: var(--font-sans-jp);
+  font-size: clamp(1.5rem, 5vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text);
+  line-height: 1.5;
+  text-shadow:
+    0 0 20px rgba(10, 10, 15, 0.8),
+    0 0 40px rgba(10, 10, 15, 0.5),
+    0 2px 4px rgba(10, 10, 15, 0.9);
+}
+
+.fv-subtitle {
+  font-family: var(--font-sans-en);
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  color: var(--color-text-muted);
+  margin-top: 20px;
+  text-shadow:
+    0 0 15px rgba(10, 10, 15, 0.8),
+    0 1px 3px rgba(10, 10, 15, 0.9);
+}
+
 
 .fv-title {
   position: relative;
