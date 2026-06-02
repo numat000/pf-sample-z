@@ -117,7 +117,6 @@ button {
   transform: scale(1.1);
 }
 
-
 .fv-bg-overlay {
   position: absolute;
   top: 0;
@@ -352,51 +351,40 @@ button {
 }
 
 .section-concept,
-.section-service,
-.section-works,
-.section-voice,
+.section-foryou,
+.section-curriculum,
+.section-gallery,
+.section-story,
+.section-instructor,
+.section-support,
 .section-flow,
 .section-faq,
 .section-contact {
   position: relative;
 }
 
-.section-concept {
-  background: rgba(10, 10, 15, 0.6);
-}
-
-.section-service {
-  background: rgba(10, 10, 15, 0.6);
-}
-
-.section-works {
-  background: var(--color-bg);
-}
-
-.section-voice {
-  background: rgba(10, 10, 15, 0.6);
-}
-
-.section-flow {
-  background: rgba(10, 10, 15, 0.7);
-}
-
-.section-faq {
-  background: var(--color-bg);
-}
-
-.section-contact {
-  background: rgba(10, 10, 15, 0.7);
-}
+.section-concept    { background: rgba(10, 10, 15, 0.6); }
+.section-foryou     { background: rgba(10, 10, 15, 0.6); }
+.section-curriculum { background: rgba(10, 10, 15, 0.7); }
+.section-gallery    { background: var(--color-bg); }
+.section-story      { background: rgba(10, 10, 15, 0.6); }
+.section-instructor { background: rgba(10, 10, 15, 0.7); }
+.section-support    { background: rgba(10, 10, 15, 0.6); }
+.section-flow       { background: rgba(10, 10, 15, 0.7); }
+.section-faq        { background: var(--color-bg); }
+.section-contact    { background: rgba(10, 10, 15, 0.7); }
 
 
 /* ============================================
    Section Gap Killer
    ============================================ */
 .section-concept::before,
-.section-service::before,
-.section-works::before,
-.section-voice::before,
+.section-foryou::before,
+.section-curriculum::before,
+.section-gallery::before,
+.section-story::before,
+.section-instructor::before,
+.section-support::before,
 .section-flow::before,
 .section-faq::before,
 .section-contact::before {
@@ -469,15 +457,20 @@ button {
 
 .fv-title {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1em;
 }
 
-.fv-title-main {
-  font-family: var(--font-serif);
-  font-size: clamp(3rem, 10vw, 8rem);
-  font-weight: 400;
-  letter-spacing: 0.15em;
+.fv-title-line {
+  display: block;
+  font-family: var(--font-sans-jp);
+  font-size: clamp(1.5rem, 5vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
   color: var(--color-text);
-  line-height: 1;
+  line-height: 1.5;
   mix-blend-mode: difference;
 }
 
@@ -553,7 +546,6 @@ section:hover .floating-part.is-visible {
   opacity: 0.65;
 }
 
-/* Concept parts */
 .parts-pen-hand {
   width: clamp(120px, 20vw, 260px);
   top: 8%;
@@ -568,7 +560,6 @@ section:hover .floating-part.is-visible {
   transform: rotate(5deg);
 }
 
-/* Service parts */
 .parts-pc-arm {
   width: clamp(140px, 22vw, 300px);
   bottom: 2%;
@@ -583,7 +574,6 @@ section:hover .floating-part.is-visible {
   transform: rotate(12deg);
 }
 
-/* Voice parts */
 .parts-smartphone {
   width: clamp(100px, 16vw, 200px);
   top: 3%;
@@ -598,7 +588,6 @@ section:hover .floating-part.is-visible {
   transform: rotate(-6deg);
 }
 
-/* Flow parts */
 .parts-handshake {
   width: clamp(120px, 18vw, 240px);
   top: 35%;
@@ -606,7 +595,6 @@ section:hover .floating-part.is-visible {
   transform: rotate(3deg);
 }
 
-/* Contact parts */
 .parts-keyboard {
   width: clamp(120px, 18vw, 220px);
   bottom: 15%;
@@ -650,7 +638,7 @@ section:hover .floating-part.is-visible {
 
 
 /* ============================================
-   03. Service
+   03. For You (Service Grid reused)
    ============================================ */
 .service-grid {
   display: grid;
@@ -696,8 +684,130 @@ section:hover .floating-part.is-visible {
 
 
 /* ============================================
-   04. Works
+   04. Curriculum
    ============================================ */
+.curriculum-steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(24px, 3vw, 40px);
+  margin-bottom: clamp(40px, 5vw, 60px);
+}
+
+.curriculum-step {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: clamp(28px, 3vw, 44px);
+}
+
+.curriculum-step-label {
+  font-family: var(--font-sans-en);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-accent-2);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.curriculum-step-title {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.curriculum-step-text {
+  font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+  color: var(--color-text-muted);
+  line-height: 2;
+}
+
+.curriculum-advanced {
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 8px;
+  padding: clamp(20px, 2.5vw, 32px);
+  margin-bottom: clamp(40px, 5vw, 60px);
+}
+
+.curriculum-advanced-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-accent-1);
+  margin-bottom: 8px;
+}
+
+.curriculum-advanced-text {
+  font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+  color: var(--color-text-muted);
+  line-height: 1.9;
+}
+
+.curriculum-style {
+  text-align: center;
+}
+
+.curriculum-style-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: clamp(20px, 3vw, 32px);
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+}
+
+.curriculum-style-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 24px);
+  flex-wrap: wrap;
+}
+
+.curriculum-style-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.curriculum-style-icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+}
+
+.curriculum-style-text {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.curriculum-style-arrow {
+  font-family: var(--font-sans-en);
+  font-size: 1.25rem;
+  color: var(--color-text-dim);
+}
+
+
+/* ============================================
+   05. Gallery (Works reused)
+   ============================================ */
+.gallery-lead {
+  font-size: clamp(0.9375rem, 1.3vw, 1.125rem);
+  color: var(--color-text-muted);
+  margin-top: -40px;
+  margin-bottom: clamp(24px, 3vw, 40px);
+}
+
 .works-horizontal-scroll {
   overflow: visible;
 }
@@ -756,68 +866,149 @@ section:hover .floating-part.is-visible {
 
 
 /* ============================================
-   05. Voice
+   06. Our Story
    ============================================ */
-.voice-slider {
-  max-width: 720px;
+.story-content {
+  max-width: 680px;
   margin: 0 auto;
 }
 
-.voice-item {
-  padding: clamp(32px, 5vw, 60px) clamp(24px, 4vw, 48px);
-  background: rgba(10, 10, 15, 0.85);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+.story-text--lead {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 500;
+  line-height: 2;
+  margin-bottom: clamp(40px, 6vw, 80px);
 }
 
-.voice-number {
-  font-family: var(--font-serif);
-  font-size: clamp(3rem, 6vw, 5rem);
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.1);
-  display: block;
-  margin-bottom: 16px;
-  line-height: 1;
-}
-
-.voice-text {
-  font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
-  line-height: 2.2;
-  margin-bottom: 24px;
-  color: var(--color-text);
-}
-
-.voice-author {
-  font-size: 0.8125rem;
+.story-text--body {
   color: var(--color-text-muted);
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  line-height: 2.4;
 }
 
-.voice-pagination {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 24px;
+.story-text--body p {
+  margin-bottom: 2em;
 }
 
-.voice-pagination .swiper-pagination-bullet {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-text-dim);
-  opacity: 1;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.voice-pagination .swiper-pagination-bullet-active {
-  background: var(--color-accent-2);
-  transform: scale(1.3);
+.story-text--body p:last-child {
+  margin-bottom: 0;
 }
 
 
 /* ============================================
-   06. Flow
+   07. Instructor
+   ============================================ */
+.instructor-content {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(32px, 5vw, 60px);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.instructor-photo {
+  flex-shrink: 0;
+  width: clamp(150px, 20vw, 240px);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.instructor-photo img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  filter: grayscale(0.3);
+}
+
+.instructor-info {
+  flex: 1;
+}
+
+.instructor-name {
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.instructor-role {
+  font-size: 0.8125rem;
+  color: var(--color-accent-2);
+  margin-bottom: 20px;
+}
+
+.instructor-bio {
+  font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+  color: var(--color-text-muted);
+  line-height: 2;
+  margin-bottom: 24px;
+}
+
+.instructor-message {
+  font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+  font-style: italic;
+  color: var(--color-text);
+  line-height: 2;
+  padding-left: 16px;
+  border-left: 2px solid var(--color-accent-2);
+}
+
+
+/* ============================================
+   08. Support
+   ============================================ */
+.support-lead {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-weight: 500;
+  line-height: 2;
+  text-align: center;
+  margin-bottom: clamp(40px, 5vw, 60px);
+}
+
+.support-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2vw, 24px);
+}
+
+.support-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: clamp(24px, 3vw, 40px);
+  text-align: center;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+.support-card:hover {
+  background: var(--color-bg-card-hover);
+  border-color: var(--color-border-hover);
+}
+
+.support-card-number {
+  font-family: var(--font-sans-en);
+  font-size: 0.75rem;
+  color: var(--color-accent-2);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.support-card-title {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.support-card-text {
+  font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+  color: var(--color-text-muted);
+  line-height: 1.9;
+}
+
+
+/* ============================================
+   09. Flow
    ============================================ */
 .flow-timeline {
   position: relative;
@@ -896,7 +1087,7 @@ section:hover .floating-part.is-visible {
 
 
 /* ============================================
-   07. FAQ
+   10. FAQ
    ============================================ */
 .faq-list {
   max-width: 780px;
@@ -951,7 +1142,7 @@ section:hover .floating-part.is-visible {
 
 
 /* ============================================
-   08. Contact
+   11. Contact
    ============================================ */
 .contact-content {
   text-align: center;
@@ -974,10 +1165,9 @@ section:hover .floating-part.is-visible {
   background: transparent;
   color: var(--color-text);
   padding: 18px 56px;
-  font-family: var(--font-sans-en);
+  font-family: var(--font-sans-jp);
   font-size: 1rem;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
   transition: border-color 0.4s ease, color 0.4s ease;
   overflow: hidden;
 }
@@ -1163,8 +1353,29 @@ body.is-loaded .content-layer {
     grid-template-columns: 1fr;
   }
 
-  .fv-title-main {
-    font-size: clamp(2.5rem, 12vw, 4rem);
+  .curriculum-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .support-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .instructor-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .instructor-message {
+    border-left: none;
+    padding-left: 0;
+    border-top: 2px solid var(--color-accent-2);
+    padding-top: 16px;
+  }
+
+  .fv-title-line {
+    font-size: clamp(1.3rem, 6vw, 2rem);
   }
 
   .works-card {
@@ -1200,5 +1411,13 @@ body.is-loaded .content-layer {
 @media (max-width: 480px) {
   .parts-keyboard {
     display: none;
+  }
+
+  .curriculum-style-steps {
+    flex-direction: column;
+  }
+
+  .curriculum-style-arrow {
+    transform: rotate(90deg);
   }
 }
